@@ -20,19 +20,19 @@ if( get_magic_quotes_gpc() ){
 }
 
 // Load third-party classes and functions
-include_once( SYS_PATH . "functions.typogrify.php" );
-include_once( SYS_PATH . "wideimage/WideImage.php" );
+include_once( INCLUDES_PATH . "functions.typogrify.php" );
+include_once( INCLUDES_PATH . "wideimage/WideImage.php" );
 
 // Load the functions
-include_once( SYS_PATH . "functions.php" );
+include_once( INCLUDES_PATH . "functions.php" );
 
 // Load the classes
-include_once( SYS_PATH . "class.base.php" );
-include_once( SYS_PATH . "class.router.php" );
-include_once( SYS_PATH . "class.db.php" );
-include_once( SYS_PATH . "class.portfolio.php" );
-include_once( SYS_PATH . "class.template.php" );
-include_once( SYS_PATH . "class.cache.php" );
+include_once( INCLUDES_PATH . "class.base.php" );
+include_once( INCLUDES_PATH . "class.router.php" );
+include_once( INCLUDES_PATH . "class.db.php" );
+include_once( INCLUDES_PATH . "class.portfolio.php" );
+include_once( INCLUDES_PATH . "class.template.php" );
+include_once( INCLUDES_PATH . "class.cache.php" );
 
 // Route the request
 $router = Router::get_instance();

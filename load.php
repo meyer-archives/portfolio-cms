@@ -5,12 +5,13 @@ include( "config.php" );
 define( "SITE_PATH", dirname(__FILE__) . "/" );
 
 if( !MOD_REWRITE_ENABLED ){
-	// Not used for media!
+	// Not to be used for media (obviously)!!
 	define( "SITE_URL", "/index.php/" );
 } else {
 	define( "SITE_URL", "/" );
 }
 
+// Fix that dumb PHP warning
 date_default_timezone_set('America/New_York');
 
 // This is where generated thumbnails and originals are kept
@@ -32,6 +33,9 @@ define( "MEDIA_PATH", SITE_PATH . "media/" );
 
 // System Stuff
 define( "SYS_PATH", SITE_PATH . "system/" );
-define( "TEMPLATE_PATH", SITE_PATH . "templates/" );
+define( "TEMPLATE_PATH", SITE_PATH . "system/templates/" );
+
+// Includes path
+define( "INCLUDES_PATH", SYS_PATH . "includes/" );
 
 ?>
