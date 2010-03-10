@@ -6,4 +6,6 @@
 	src: local('League Gothic'), local('LeagueGothic'), url('League_Gothic.woff') format('woff'), url('League_Gothic.ttf') format('truetype'), url('League_Gothic.svg#LeagueGothic') format('svg');
 }
 
-
+h1,h2,h3,h4,h5,h6{
+	font: 40px/60px "LeagueGothicRegular";
+}

@@ -6,10 +6,6 @@
 			</div><!-- .container -->
 		</div><!-- #footer -->
 	</div><!-- #wrapper -->
-	<div id="admin-bar">
-		<div class="inner">
-			<p>Admin Bar</p>
-		</div>
-	</div>
+	<?php include( TEMPLATE_PATH . "snippets/admin-bar.php" ); ?>
 </body>
 </html>

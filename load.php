@@ -14,6 +14,9 @@ if( !MOD_REWRITE_ENABLED ){
 // API
 define( "API_URL", SITE_URL . "api/" );
 
+// Project prefix
+define( "PROJECT_PREFIX", "gallery/" ); // Prefix + trailing slash
+
 // Fix that dumb PHP warning
 date_default_timezone_set('America/New_York');
 

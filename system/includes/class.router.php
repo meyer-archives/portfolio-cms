@@ -43,29 +43,30 @@ class Router{
 
 		$patterns = array(
 			// Home (empty string)
-			'project_short_url'=>'/^go\/(?P<project_id>\d+)$/i',
+			'project_short_url'=>'#^go\/(?P<project_id>\d+)$#i',
 
 			// API
 			// Items
-			'item_list'=>'/^api\/items$/i',
-			'item_single'=>'/^api\/item\/(?P<item_id>\d+)$/i',
-			'item_add'=>'/^api\/item\/add$/i',
-			'item_delete'=>'/^api\/item\/(?P<item_id>\d+)\/delete$/i',
+			'item_list'=>'#^api/items$#i',
+			'item_single'=>'#^api/item/(?P<item_id>\d+)$#i',
+			'item_add'=>'#^api/item/add$#i',
+			'item_delete'=>'#^api/item/(?P<item_id>\d+)/delete$#i',
 
 			// Projects
-			'project_list'=>'/^api\/projects$/i',
-			'project_single'=>'/^api\/project\/(?P<project_id>\d+)$/',
-			'project_add'=>'/^api\/project\/add$/',
-			'project_delete'=>'/^api\/project\/(?P<project_id>\d+)\/delete$/',
+			'project_list'=>'#^api/projects$#i',
+			'project_single'=>'#^api/project/(?P<project_id>\d+)$#i',
+			'project_add'=>'#^api/project/add$#i',
+			'project_delete'=>'#^api/project/(?P<project_id>\d+)/delete$#i',
 
 			// Publish (will eventually be replaced)
-			'publish'=>'/^api\/publish$/i',
+			'publish'=>'#^api/publish$#i',
 
 			// Miscellaneous
-			'logout'=>'/^logout$/i',
+			'logout'=>'#^logout$#i',
 
 			// Catchall
-			'page_route'=>'/^(?P<url_string>.*+)$/i' // Single-level 
+			'project_route'=>'#^'.PROJECT_PREFIX.'(?P<project_slug>.*+)$#i',
+			'page_route'=>'#^(?P<url_string>.*+)$#i' // Single-level 
 		);
 
 		for(
@@ -120,12 +121,9 @@ class Router{
 		}
 	}
 
-	private function page_route( $args ){
+	private function project_route( $args ){
 		$p = Portfolio::get_instance();
-		if( empty( $args["url_string"] ) ){
-			$t = new Template("project-list");
-			$t->render();
-		} elseif( $current_project = $p->project_by_slug($args["url_string"]) ) {
+		if( $current_project = $p->project_by_slug($args["project_slug"]) ) {
 			$t = new Template("project-single");
 			$t->set("current_project",$current_project);
 			$t->render();
@@ -133,6 +131,22 @@ class Router{
 			$t = new Template("error-page");
 			$t->set( "status_code", 404 );
 			$t->set( "error_message", "Page not found" );
+			$t->set( "error_details", "The page you are looking for could not be found." );
+			$t->set( "page_title", "Page not found" );
+			$t->render();
+		}
+	}
+
+	private function page_route( $args ){
+		$p = Portfolio::get_instance();
+		if( empty( $args["url_string"] ) ){
+			$t = new Template("project-list");
+			$t->render();
+		} else {
+			$t = new Template("error-page");
+			$t->set( "status_code", 404 );
+			$t->set( "error_message", "Page not found" );
+			$t->set( "error_details", "The page you are looking for could not be found." );
 			$t->set( "page_title", "Page not found" );
 			$t->render();
 		}

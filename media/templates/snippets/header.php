@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title><?php echo "Portfolio Admin" . ( !empty( $page_title ) ? " &rsaquo; " . $page_title : "" ); ?></title>
+	<title><?php echo $sitename . ( $page_title ? " &rsaquo; " . $page_title : "" ); ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_URL ?>css/site.css" media="all">
 
@@ -43,3 +43,9 @@
 		</div><!-- #header -->
 		<div id="content">
 			<div class="container">
+				<div id="project-add">
+					<form action="<?php echo API_URL ?>project/add" method="post" accept-charset="utf-8">
+						<input type="text" name="project_title" value="">
+						<p><button type="submit">Add New Project</button> <a class="cancel" href="#">Cancel</a></p>
+					</form>
+				</div>

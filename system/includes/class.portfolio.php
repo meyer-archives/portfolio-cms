@@ -96,6 +96,8 @@ class Portfolio {
 			"title" => "Unpublished",
 			"title_src" => "Unpublished",
 			"slug" => "unpublished",
+			"url" => SITE_URL . PROJECT_PREFIX . "unpublished/",
+			"order" => 0,
 			"date_added" => 0,
 			"last_updated" => 0,
 			"meta" => array()
@@ -108,7 +110,9 @@ class Portfolio {
 				"id" => (int) $row["project_id"],
 				"title" => unescape($row["project_title"],false),
 				"title_src" => unescape($row["project_title_src"]),
-				"slug" => "not-implemented-yet-".$row["project_id"],
+				"slug" => $row["project_slug"],
+				"url" => SITE_URL . PROJECT_PREFIX . $row["project_slug"] . "/",
+				"order" => (int) $row["project_order"],
 				"date_added" => strtotime($row["date_added"]),
 				"last_updated" => strtotime($row["last_updated"]),
 				"meta" => array()
@@ -361,6 +365,7 @@ class Portfolio {
 	///////////////////////////////////////////////////////
 
 	function project_add( $title ){
+		$slug = sluginate($title,"-");
 		$title_src = escape($title);
 		$title = escape_typogrify($title);
 
@@ -368,9 +373,12 @@ class Portfolio {
 			"INSERT INTO portfolio_projects (
 				project_title,
 				project_title_src,
+				project_slug,
 				project_order
-			) VALUES ( '%s', '%s', '0' );",
-			$title, $title_src
+			) VALUES ( '%s', '%s', '%s', '0' );",
+			$title,
+			$title_src,
+			$slug
 		);
 
 //		$this->db_version_update();
@@ -378,7 +386,8 @@ class Portfolio {
 		return array(
 			"id" => $this->sqlite->lastInsertId(),
 			"title" => $title,
-			"title_src" => $title_src
+			"title_src" => $title_src,
+			"slug" => $slug
 		);
 	}
 

@@ -19,7 +19,7 @@
 	?>
 	</ul>
 	<div id="project-add">
-		<form action="<?php echo API_URL ?>project/add" method="post" accept-charset="utf-8">
+		<form action="<?php echo API_URL ?>project/add.html" method="post" accept-charset="utf-8">
 			<input type="text" name="project_title" value="">
 			<p><button type="submit">Add New Project</button> <a class="cancel" href="#">Cancel</a></p>
 		</form>
@@ -70,7 +70,7 @@ foreach( $items[$pid] as $item ){
 			</ul>
 <?php if( $pid > 0 ) { ?>
 			<div class="item-add">
-				<form enctype="multipart/form-data" action="<?php echo API_URL; ?>item/add" method="POST">
+				<form enctype="multipart/form-data" action="<?php echo API_URL; ?>item/add/" method="POST">
 					<h4>Add a new item to this project</h4>
 					<input type="hidden" name="item_project" value="<?php echo $pid; ?>">
 					<input name="image_original" type="file" />

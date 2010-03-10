@@ -1,6 +1,6 @@
 <?php
 
-// Incredibly simple template class
+// Template Class
 class Template {
 	private static $data = array();
 	private static $template_name;
@@ -16,8 +16,11 @@ class Template {
 
 		self::set("body_id",$name);
 
-		// This will come from variables eventually
-		self::set("sitename",$p->meta("sitename"));
+		if( $p->meta("sitename") ){
+			self::set("sitename",$p->meta("sitename"));
+		} else {
+			self::set("sitename","SITE NAME NOT SET");
+		}
 		self::set("page_title",false);
 
 		self::set( 'items_by_id', $p->items_by_id() );
@@ -34,6 +37,13 @@ class Template {
 
 	public static function render(){
 		extract( self::$data );
+		if( !empty( $status_code ) ){
+			switch( $status_code ){
+				case 404:
+				echo "<!-- 404 error -->";
+				break;
+			}
+		}
 		include_once( TEMPLATE_PATH . "snippets/header.php" );
 		echo "\n\n";
 		include_once( self::$template_name );

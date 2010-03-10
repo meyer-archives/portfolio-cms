@@ -10,7 +10,7 @@ foreach( $projects_by_id as $pid => $project ){
 			echo "\t\t\t<li>{$item["title"]}</li>\n";
 		}
 	} else {
-		echo "\t\t\t<li class='empty'>Project $pid ({$project["title"]}) is empty</li>";
+		echo "\t\t\t<li class='empty'>Project $pid ({$project["title"]}) is empty</li>\n";
 	}
 	echo "\t\t</ul>\n";
 	echo "\t</li>\n";
