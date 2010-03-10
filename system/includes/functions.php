@@ -81,8 +81,10 @@ function show_error($message, $level=E_USER_NOTICE) {
 	trigger_error( $message, $level );
 }
 
-function show_404($identifier = false){
-	$t = new Template("404");
+function show_404(){
+	$t = new Template("error-page");
+	$t->set( "error_message", "Page Not Found" );
+	$t->set( "error_description", "The page you&rsquo;re looking for cannot be found." );
 	$t->render();
 }
 

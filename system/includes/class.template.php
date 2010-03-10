@@ -20,6 +20,11 @@ class Template {
 		self::set("sitename",$p->meta("sitename"));
 		self::set("page_title",false);
 
+		self::set( 'items_by_id', $p->items_by_id() );
+		self::set( 'items_by_project', $p->items_by_project() );
+		self::set( 'projects_by_id', $p->projects_by_id() );
+		self::set( 'projects_by_slug', $p->projects_by_slug() );
+
 		if( $render ) self::render();
 	}
 
@@ -29,7 +34,6 @@ class Template {
 
 	public static function render(){
 		extract( self::$data );
-		die( "<pre>".print_r( self::$data, 1 ) );
 		include_once( TEMPLATE_PATH . "snippets/header.php" );
 		echo "\n\n";
 		include_once( self::$template_name );

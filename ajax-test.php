@@ -7,7 +7,7 @@ include_once( "../load.php" );
 	<title></title>
 	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="CSS" charset="utf-8">
 
-	<script src="<?php echo MEDIA_URL; ?>jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="<?php echo SYS_MEDIA_URL; ?>jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {

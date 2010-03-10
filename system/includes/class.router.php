@@ -87,9 +87,9 @@ class Router{
 
 	private function goto( $location = false ){
 		if( !$location ){
-			header( "Location: " . ADMIN_URL . "projects.html" );
+			header( "Location: " . API_URL . "projects.html" );
 		} else {
-			header( "Location: " . ADMIN_URL . $location );
+			header( "Location: " . API_URL . $location );
 		}
 		exit;
 	}
@@ -121,22 +121,26 @@ class Router{
 	}
 
 	private function page_route( $args ){
+		$p = Portfolio::get_instance();
 		if( empty( $args["url_string"] ) ){
-			$p = Portfolio::get_instance();
-			$t = new Template("index");
-			$t->set("projects_by_id",$p->projects_by_id());
-			$t->set("projects_by_slug",$p->projects_by_slug());
-			$t->set("items_by_id",$p->items_by_id());
-			$t->set("items_by_project",$p->items_by_project());
+			$t = new Template("project-list");
+			$t->render();
+		} elseif( $current_project = $p->project_by_slug($args["url_string"]) ) {
+			$t = new Template("project-single");
+			$t->set("current_project",$current_project);
 			$t->render();
 		} else {
-			die( "Let&rsquo;s see if '{$args["url_string"]}' matches a project..." );
+			$t = new Template("error-page");
+			$t->set( "status_code", 404 );
+			$t->set( "error_message", "Page not found" );
+			$t->set( "page_title", "Page not found" );
+			$t->render();
 		}
 	}
 
 	function project_short_url( $args ){
 		$p = Portfolio::get_instance();
-		if( $p->project($args["project_id"]) ){
+		if( $p->project_by_id($args["project_id"]) ){
 			die( "Project {$args["project_id"]} exists" );
 		} else {
 			die( "Project {$args["project_id"]} does not exist" );
@@ -187,7 +191,7 @@ class Router{
 		$pid = $args["project_id"];
 
 		$p = Portfolio::get_instance();
-		$project = $p->project($pid);
+		$project = $p->project_by_id($pid);
 
 		if( !empty( $project ) ){
 			$this->return_data(
@@ -225,7 +229,7 @@ class Router{
 		$p = Portfolio::get_instance();
 		$id = $args["item_id"];
 
-		if( $data = $p->item($id) ) {
+		if( $data = $p->item_by_id($id) ) {
 			$this->return_data(
 				"success",
 				"Item $id successfully fetched",
@@ -265,7 +269,7 @@ class Router{
 			if( !empty($_POST["item_project"] ) )
 				$project = escape( $_POST["item_project"] );
 
-			$insert_id = $p->item_add(
+			$inserted_item = $p->item_add(
 				$title,
 				$desc,
 				$project
@@ -289,17 +293,17 @@ class Router{
 				$w_offset = 0;
 			}
 
-			$thumb_bkg = WideImage::load(SITE_PATH . "storage/thumbnail-frame-bkg-50.png");
+			$thumb_bkg = WideImage::load(SYS_MEDIA_PATH . "images/thumbnail-frame-bkg-50.png");
 			$thumb_bkg
 				->merge( $thumb, 0, 0)
 				->merge( $thumb_hover, $w_offset,$h_offset )
 				->merge( $thumb_100, 50, 0 )
-				->merge(WideImage::load(SITE_PATH . "storage/thumbnail-frame-sprite-50.png"),0,0)
-				->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_50.jpg');
+				->merge(WideImage::load(SYS_MEDIA_PATH . "images/thumbnail-frame-sprite-50.png"),0,0)
+				->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_small.jpg');
 
 			$image->resize(500, 500)->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_500.jpg');
-			$image->resize(1000, 1000)->saveToFile(UPLOAD_PATH . 'image'.$insert_id.'_orig.jpg');
-			$image->resize(700,700)->merge($watermark, '0', '100%-250')->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_700.jpg');
+			$image->resize(1000, 1000)->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_orig.jpg');
+			$image->resize(700,700)->merge($watermark, '0', '100%-250')->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_700.jpg");
 
 			$this->return_data(
 				"success",
@@ -346,9 +350,9 @@ class Router{
 		$p = Portfolio::get_instance();
 
 		if( $deleted_item = $p->item_delete($id) ){
-			@unlink(IMAGE_PATH . 'image'.$id.'_50.jpg');
+			@unlink(IMAGE_PATH . 'image'.$id.'_small.jpg');
 			@unlink(IMAGE_PATH . 'image'.$id.'_500.jpg');
-			@unlink(UPLOAD_PATH . 'image'.$id.'_orig.jpg');
+			@unlink(IMAGE_PATH . 'image'.$id.'_orig.jpg');
 
 			$this->return_data(
 				"success",
@@ -430,7 +434,7 @@ class Router{
 		$id = $args["project_id"];
 		$p = Portfolio::get_instance();
 		$items_by_proj = $p->items_by_project();
-		$project = $p->project($id);
+		$project = $p->project_by_id($id);
 
 		if( !empty( $project ) ) {
 

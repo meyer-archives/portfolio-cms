@@ -10,3 +10,66 @@ h1,h2,h3,h4,h5,h6{
 h1{
 	font-size: 24px;
 }
+
+#admin-bar{
+	display: none;
+}
+
+body.logged-in #admin-bar{
+	position: fixed;
+	right: 0;
+	top: 0;
+	display: block;
+	height: 100%;
+	min-height: 100%;
+	background: #AAF;
+	width: 250px;
+	overflow: auto;
+}
+
+* html #admin-bar{
+	position: absolute;
+}
+
+#wrapper{
+}
+
+body,html{
+	height: 100%;
+}
+
+html{
+	overflow: hidden;
+}
+
+body{
+	overflow: auto;
+}
+
+body.logged-in{
+	background: #FAA;
+}
+
+body.logged-in #wrapper{
+	margin-right: 250px;
+	height: 100%;
+	overflow: auto;
+}
+
+.container{
+	width: 960px;
+	margin: 0 auto;
+	background-color: rgba(254,255,255,0.53);
+}
+
+#content{
+	background: #AAA;
+}
+
+#header{
+	background: #AFA;
+}
+
+#footer{
+	background: #AFF;
+}

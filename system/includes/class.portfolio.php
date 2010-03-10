@@ -73,8 +73,8 @@ class Portfolio {
 					"order" => $row["item_order"],
 					"date_added" => strtotime($row["date_added"]),
 					"last_updated" => strtotime($row["last_updated"]),
-					"img_original" => UPLOAD_URL . "image{$row["item_id"]}_orig.jpg",
-					"img_thumb" => IMAGE_URL . "image{$row["item_id"]}_50.jpg",
+					"img_original" => IMAGE_URL . "image{$row["item_id"]}_orig.jpg",
+					"img_thumb" => IMAGE_URL . "image{$row["item_id"]}_small.jpg",
 					"img_500" => IMAGE_URL . "image{$row["item_id"]}_500.jpg",
 					"img_700" => IMAGE_URL . "image{$row["item_id"]}_700.jpg",
 					"meta" => array()
@@ -223,7 +223,7 @@ class Portfolio {
 			$project_id = $new_project["id"];
 		}
 
-		if( !$this->project($project_id) )
+		if( !$this->project_by_id($project_id) )
 			die( "Project {$project_id} doesn't exist" );
 
 		$query = sprintf( "INSERT INTO portfolio_items (
@@ -266,8 +266,8 @@ class Portfolio {
 			"order" => $order,
 			"date_added"=>false,
 			"last_updated"=>false,
-			"img_original" => UPLOAD_URL . "image{$id}_orig.jpg",
-			"img_thumb" => IMAGE_URL . "image{$id}_50.jpg",
+			"img_original" => IMAGE_URL . "image{$id}_orig.jpg",
+			"img_thumb" => IMAGE_URL . "image{$id}_small.jpg",
 			"img_500" => IMAGE_URL . "image{$id}_500.jpg",
 			"img_700" => IMAGE_URL . "image{$id}_700.jpg"
 		);
@@ -333,8 +333,8 @@ class Portfolio {
 				"order" => $order,
 				"date_added"=>false,
 				"last_updated"=>false,
-				"img_original" => UPLOAD_URL . "image{$id}_orig.jpg",
-				"img_thumb" => IMAGE_URL . "image{$id}_50.jpg",
+				"img_original" => IMAGE_URL . "image{$id}_orig.jpg",
+				"img_thumb" => IMAGE_URL . "image{$id}_small.jpg",
 				"img_500" => IMAGE_URL . "image{$id}_500.jpg",
 				"img_700" => IMAGE_URL . "image{$id}_700.jpg"
 			);
@@ -349,7 +349,7 @@ class Portfolio {
 		$query = "DELETE FROM portfolio_items WHERE item_id = '$id'";
 //		$this->db_version_update();
 		if( $this->sqlite->exec($query) ){
-			return $this->item( $id );
+			return $this->item_by_id( $id );
 		} else {
 			return false;
 		}
@@ -419,7 +419,7 @@ class Portfolio {
 				$this->sqlite->exec($query) &&
 				$this->sqlite->exec($query2)
 			){
-				return $this->project( $id );
+				return $this->project_by_id( $id );
 			} else {
 				return false;
 			}
@@ -432,8 +432,8 @@ class Portfolio {
 	//  CATEGORIES & ITEMS - GET
 	///////////////////////////////////////////////////////
 
-	function item($id){
-		return !empty( $this->items_by_id[$id] ) ? $this->items_by_id[$id] : array();
+	function item_by_id($id){
+		return !empty( $this->items_by_id[$id] ) ? $this->items_by_id[$id] : false;
 	}
 
 	function items_by_id(){
@@ -442,14 +442,18 @@ class Portfolio {
 
 	function items_by_project($id=false){
 		if( $id ) {
-			return !empty( $this->items_by_project[id] ) ? $this->items_by_project[$id] : array();
+			return !empty( $this->items_by_project[id] ) ? $this->items_by_project[$id] : false;
 		} else {
 			return $this->items_by_project;
 		}
 	}
 
-	function project($id){
-		return !empty( $this->projects_by_id[$id] ) ? $this->projects_by_id[$id] : array();
+	function project_by_id($id){
+		return !empty( $this->projects_by_id[$id] ) ? $this->projects_by_id[$id] : false;
+	}
+
+	function project_by_slug( $slug ){
+		return !empty( $this->projects_by_slug[$slug] ) ? $this->projects_by_slug[$slug] : false;
 	}
 
 	function projects_by_id(){

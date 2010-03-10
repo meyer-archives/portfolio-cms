@@ -11,29 +11,32 @@ if( !MOD_REWRITE_ENABLED ){
 	define( "SITE_URL", "/" );
 }
 
+// API
+define( "API_URL", SITE_URL . "api/" );
+
 // Fix that dumb PHP warning
 date_default_timezone_set('America/New_York');
 
-// This is where generated thumbnails and originals are kept
+// All user-generated files
 // It can be located anywhere, as long as it's writable and web-accessible
 define( "STORAGE_URL", "/storage/" );
 define( "STORAGE_PATH", SITE_PATH . "storage/" );
-
-// Original files
-define( "UPLOAD_PATH", STORAGE_PATH . "originals/" );
-define( "UPLOAD_URL", STORAGE_URL . "originals/" );
 
 // Files accessed through the browser
 define( "IMAGE_PATH", STORAGE_PATH . "images/" );
 define( "IMAGE_URL", STORAGE_URL . "images/" );
 
-// Includes URL
-define( "MEDIA_URL", "/media/" );
-define( "MEDIA_PATH", SITE_PATH . "media/" );
-
 // System Stuff
 define( "SYS_PATH", SITE_PATH . "system/" );
-define( "TEMPLATE_PATH", SITE_PATH . "system/templates/" );
+
+// User Media
+define( "MEDIA_URL", "/media/" );
+define( "MEDIA_PATH", SITE_PATH . "media/" );
+define( "TEMPLATE_PATH", MEDIA_PATH . "templates/" );
+
+// System Media URL
+define( "SYS_MEDIA_URL", "/system/media/" );
+define( "SYS_MEDIA_PATH", SITE_PATH . "system/media/" );
 
 // Includes path
 define( "INCLUDES_PATH", SYS_PATH . "includes/" );
