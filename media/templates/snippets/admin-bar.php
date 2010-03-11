@@ -1,7 +1,22 @@
 <div id="admin-bar">
 <?php if( !empty( $current_project ) ) { ?>
 	<h2><?php echo $current_project["title"]; ?></h2>
-	<p>Admin Bar</p>
+	<ul>
+<?php
+
+if( !empty( $items_by_project[$current_project["id"]] ) ) {
+
+foreach( $items_by_project[$current_project["id"]] as $item ) {
+
+?>
+
+<?php
+
+}
+}
+
+?>
+	</ul>
 <?php } else {
 
 $project_array = array();

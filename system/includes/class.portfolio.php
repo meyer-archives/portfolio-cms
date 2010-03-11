@@ -221,6 +221,7 @@ class Portfolio {
 		$title = escape_typogrify($title);
 		$desc_src = escape($desc);
 		$desc = escape_typogrify( $desc );
+		$order = 0;
 
 		if( !$this->projects_by_id() ) {
 			$new_project = $this->project_add("New Project");
@@ -369,6 +370,9 @@ class Portfolio {
 		$title_src = escape($title);
 		$title = escape_typogrify($title);
 
+		if( !empty( $this->projects_by_slug[$slug] ) )
+			$slug = $slug . "-" . substr( md5(time()), 0, 5 );
+
 		$query = sprintf(
 			"INSERT INTO portfolio_projects (
 				project_title,
@@ -382,13 +386,16 @@ class Portfolio {
 		);
 
 //		$this->db_version_update();
-		$this->sqlite->exec( $query );
-		return array(
-			"id" => $this->sqlite->lastInsertId(),
-			"title" => $title,
-			"title_src" => $title_src,
-			"slug" => $slug
-		);
+		if( $this->sqlite->exec( $query ) ) {
+			return array(
+				"id" => $this->sqlite->lastInsertId(),
+				"title" => $title,
+				"title_src" => $title_src,
+				"slug" => $slug
+			);
+		} else {
+			return false;
+		}
 	}
 
 	function project_update( $id, $title ){

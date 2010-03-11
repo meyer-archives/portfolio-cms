@@ -3,7 +3,7 @@
 <?php
 
 foreach( $projects_by_id as $pid => $project ){
-	echo "\t<li id='project-$pid'>Project $pid - {$project["title"]}\n";
+	echo "\t<li id='project-$pid'><h3>{$project["title"]} ({$pid})</h3>\n";
 	echo "\t\t<ul class='item-list'>\n";
 	if( !empty( $items_by_project[$pid] ) ) {
 		foreach( $items_by_project[$pid] as $item ){

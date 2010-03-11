@@ -1,3 +1,5 @@
+/* @override http://cooper.local:4444/system/media/css/admin.css */
+
 /* @override http://local.cassialeidigh.com/system/media/css/admin.css */
 
 @font-face {
@@ -7,5 +9,41 @@
 }
 
 h1,h2,h3,h4,h5,h6{
-	font: 40px/60px "LeagueGothicRegular";
+	font-family: "League Gothic", "LeagueGothicRegular";
+	position: relative;
+}
+
+p{
+	position: relative;
+}
+
+h1{
+	font-size: 36px;
+}
+
+h2{
+	font-size: 30px;
+}
+
+h3{
+	font-size: 24px;
+}
+
+h1 span.quo, h1 span.dquo,
+h2 span.quo, h2 span.dquo,
+h3 span.quo, h3 span.dquo,
+h4 span.quo, h4 span.dquo,
+h5 span.quo, h5 span.dquo,
+h6 span.quo, h6 span.dquo,
+p span.quo, p span.dquo{
+	position: absolute;
+	display: block;
+	width: 20px;
+	left: -20px;
+	top: 0;
+	text-align: right;
+}
+
+p{
+	position: relative;
 }

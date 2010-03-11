@@ -36,7 +36,7 @@ function escape_typogrify( $string ){
 // Undo the previous function
 // Don't call this on typogrify'd content
 function unescape( $string ){
-	$string = stripslashes( $string );
+//	$string = stripslashes( $string );
 	$string = preg_replace("#'{2,}#", "'", $string);
 	return $string;
 }

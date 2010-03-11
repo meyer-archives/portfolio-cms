@@ -41,7 +41,7 @@ function dash( $text ){
 
 function _cap_wrapper( $matchobj ){
 	if ( !empty($matchobj[2]) ){
-		return sprintf(''.LT.'span class='.DQ.'caps'.DQ.GT.'%s'.LT.'/span'.GT.'', $matchobj[2]);
+		return sprintf(LT.'span class='.DQ.'caps'.DQ.GT.'%s'.LT.'/span'.GT, $matchobj[2]);
 	} else {
 		$mthree = $matchobj[3];
 		if ( ($mthree{strlen($mthree)-1}) == " " ){
@@ -51,7 +51,7 @@ function _cap_wrapper( $matchobj ){
 			$caps = $mthree;
 			$tail = '';
 		}			 
-		return sprintf(''.LT.'span class='.DQ.'caps'.DQ.GT.'%s'.LT.'/span'.GT.'%s', $caps, $tail);
+		return sprintf(LT.'span class='.DQ.'caps'.DQ.GT.'%s'.LT.'/span'.GT.'%s', $caps, $tail);
 	}
 }
 
