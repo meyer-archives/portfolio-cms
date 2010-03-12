@@ -100,7 +100,8 @@ class Portfolio {
 			"order" => 0,
 			"date_added" => 0,
 			"last_updated" => 0,
-			"meta" => array()
+			"meta" => array(),
+			"item_count" => !empty( $this->items_by_project[0] ) ? count( $this->items_by_project[0] ) : 0
 		);
 
 		$project_results = $this->sqlite->query("SELECT * FROM portfolio_projects ORDER BY project_order ASC;")->fetchAll();
@@ -115,7 +116,8 @@ class Portfolio {
 				"order" => (int) $row["project_order"],
 				"date_added" => strtotime($row["date_added"]),
 				"last_updated" => strtotime($row["last_updated"]),
-				"meta" => array()
+				"meta" => array(),
+				"item_count" => !empty( $this->items_by_project[$row["project_id"]] ) ? count( $this->items_by_project[$row["project_id"]] ) : 0
 			);
 		}
 
@@ -449,7 +451,7 @@ class Portfolio {
 	///////////////////////////////////////////////////////
 
 	function item_by_id($id){
-		return !empty( $this->items_by_id[$id] ) ? $this->items_by_id[$id] : false;
+		return !empty( $this->items_by_id[$id] ) ? $this->items_by_id[$id] : array();
 	}
 
 	function items_by_id(){
@@ -458,18 +460,18 @@ class Portfolio {
 
 	function items_by_project($id=false){
 		if( $id ) {
-			return !empty( $this->items_by_project[id] ) ? $this->items_by_project[$id] : false;
+			return !empty( $this->items_by_project[$id] ) ? $this->items_by_project[$id] : array();
 		} else {
 			return $this->items_by_project;
 		}
 	}
 
 	function project_by_id($id){
-		return !empty( $this->projects_by_id[$id] ) ? $this->projects_by_id[$id] : false;
+		return !empty( $this->projects_by_id[$id] ) ? $this->projects_by_id[$id] : array();
 	}
 
 	function project_by_slug( $slug ){
-		return !empty( $this->projects_by_slug[$slug] ) ? $this->projects_by_slug[$slug] : false;
+		return !empty( $this->projects_by_slug[$slug] ) ? $this->projects_by_slug[$slug] : array();
 	}
 
 	function projects_by_id(){

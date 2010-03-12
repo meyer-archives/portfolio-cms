@@ -1,5 +1,7 @@
 <?php
 
+header("Content-type: text/html; charset=utf-8");
+
 include_once( "load.php" );
 
 // Manually disable magic quotes: http://bit.ly/86XywY

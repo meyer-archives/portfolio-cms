@@ -48,15 +48,15 @@ class Router{
 			// API
 			// Items
 			'item_list'=>'#^api/items$#i',
-			'item_single'=>'#^api/item/(?P<item_id>\d+)$#i',
+			'item_single'=>'#^api/item$#i',
 			'item_add'=>'#^api/item/add$#i',
-			'item_delete'=>'#^api/item/(?P<item_id>\d+)/delete$#i',
+			'item_delete'=>'#^api/item/delete$#i',
 
 			// Projects
 			'project_list'=>'#^api/projects$#i',
-			'project_single'=>'#^api/project/(?P<project_id>\d+)$#i',
+			'project_single'=>'#^api/project$#i',
 			'project_add'=>'#^api/project/add$#i',
-			'project_delete'=>'#^api/project/(?P<project_id>\d+)/delete$#i',
+			'project_delete'=>'#^api/project/delete$#i',
 
 			// Publish (will eventually be replaced)
 			'publish'=>'#^api/publish$#i',
@@ -202,7 +202,9 @@ class Router{
 
 
 	function items_by_project( $args ){
-		$pid = $args["project_id"];
+		if( empty( $_GET["project_id"] ) )
+			show_error( '$_GET["project_id"] must be set for items_by_project()', E_USER_ERROR );
+		$pid = $_GET["project_id"];
 
 		$p = Portfolio::get_instance();
 		$project = $p->project_by_id($pid);
@@ -228,20 +230,60 @@ class Router{
 	function item_list( $args ){
 		$p = Portfolio::get_instance();
 
-		$this->return_data(
-			"success",
-			"All items successfully fetched",
-			array(
-				"items_by_id"=>$p->items_by_id(),
-				"items_by_project"=>$p->items_by_project(),
-				"item_count"=>count($p->items_by_id())
-			)
-		);
+		if( !empty( $_GET["project_id"] ) ) {
+			$pid = (int) $_GET["project_id"];
+			if( $current_project = $p->project_by_id($pid) ) {
+				$this->return_data(
+					"success",
+					"All items from project {$pid} successfully fetched",
+					array(
+						"current_project"=>$current_project,
+						"items"=>$p->items_by_project($current_project["id"])
+					)
+				);
+			} else {
+				$this->return_data(
+					"error",
+					"Project {$pid} does not exist"
+				);
+			}
+		} elseif( !empty( $_GET["project_slug"] ) ) {
+			$pslug = $_GET["project_slug"];
+
+			if( $current_project = $p->items_by_slug($pslug) ) {
+				$this->return_data(
+					"success",
+					"All items from project '$pslug' successfully fetched",
+					array(
+						"current_project"=>$current_project,
+						"items"=>$p->items_by_project($current_project["id"])
+					)
+				);
+			} else {
+				$this->return_data(
+					"error",
+					"Project '$pslug' does not exist"
+				);
+			}
+		} else {
+			$this->return_data(
+				"success",
+				"All items successfully fetched",
+				array(
+					"items_by_id"=>$p->items_by_id(),
+					"items_by_project"=>$p->items_by_project(),
+					"item_count"=>count($p->items_by_id())
+				)
+			);
+		}
 	}
 
 	function item_single( $args ){
+		if( empty( $_GET["item_id"] ) )
+			show_error( '$_GET["item_id"] must be set for item_single()', E_USER_ERROR );
+
 		$p = Portfolio::get_instance();
-		$id = $args["item_id"];
+		$id = $_GET["item_id"];
 
 		if( $data = $p->item_by_id($id) ) {
 			$this->return_data(
@@ -359,7 +401,9 @@ class Router{
 	}
 
 	function item_delete( $args ){
-		$id = $args["item_id"];
+		if( empty( $_GET["item_id"] ) )
+			show_error( '$_GET["item_id"] must be set for item_delete()', E_USER_ERROR );
+		$id = $_GET["item_id"];
 
 		$p = Portfolio::get_instance();
 
@@ -445,27 +489,43 @@ class Router{
 	}
 
 	function project_single( $args ){
-		$id = $args["project_id"];
 		$p = Portfolio::get_instance();
-		$items_by_proj = $p->items_by_project();
-		$project = $p->project_by_id($id);
+
+		$id = false;
+		$slug = false;
+
+		if( !empty( $_GET["project_id"] ) ) {
+			$id = (int) $_GET["project_id"];
+			$project = $p->project_by_id($id);
+		} elseif( !empty( $_GET["project_slug"] ) ) {
+			$slug = $_GET["project_slug"];
+			$project = $p->project_by_slug($slug);
+		} else {
+			show_error( '$_GET["project_id"] or $_GET["project_slug"] must be set for project_single()', E_USER_ERROR );
+		}
 
 		if( !empty( $project ) ) {
 
-			$item_count = !empty( $items_by_proj[$id] ) ? count( $items_by_proj[$id] ) : 0;
-			$project = $project + array( "item_count" => $item_count );
+			$items = $p->items_by_project( $project["id"] );
+
+//			$item_count = $items ? count( $items ) : 0;
+//			$project["item_count"] = $item_count;
 
 			$this->return_data(
 				"success",
-				"Project $id ({$project['title_src']}) successfully fetched",
+				"Project {$project["id"]} ({$project['title_src']}) successfully fetched",
 				array(
-					"project" => $project
+					"project" => $project,
+					"items" => $items
 				)
 			);
 		} else {
+			$error = "id of ".( (int) $id );
+			if( $slug ) $error = "slug of '" . htmlentities($slug) . "'";
+
 			$this->return_data(
 				"error",
-				"No project with the ID of $id could be found"
+				"No project with the $error could be found"
 			);
 		}
 	}
@@ -492,7 +552,9 @@ class Router{
 	}
 
 	function project_delete( $args ){
-		$id = $args["project_id"];
+		if( empty( $_GET["project_id"] ) )
+			show_error( '$_GET["project_id"] must be set for project_delete()', E_USER_ERROR );
+		$id = $_GET["project_id"];
 		if( $deleted_project = $portfolio->project_delete($id) ){
 			$this->return_data(
 				"success",
@@ -510,7 +572,9 @@ class Router{
 	}
 
 	function project_save( $args ){
-		$id = $args["project_id"];
+		if( empty( $_GET["project_id"] ) )
+			show_error( '$_GET["project_id"] must be set for project_save()', E_USER_ERROR );
+		$id = $_GET["project_id"];
 		if( empty( $_POST["project_title"] ) ){
 			$this->return_data(
 				"error",

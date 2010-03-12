@@ -24,7 +24,7 @@ function logged_in(){
 
 // For use before entering data into the DB
 function escape( $string ){
-	$string = htmlspecialchars($string,ENT_QUOTES,"UTF-8",false);
+	$string = htmlentities($string,ENT_QUOTES,"UTF-8",false);
 	return sqlite_escape_string( $string );
 }
 
@@ -45,6 +45,8 @@ function unescape( $string ){
 function sluginate( $string, $sep = "_" ){
 	return trim( preg_replace("/[^a-z0-9]+/", $sep, strtolower( $string ) ), $sep );
 }
+
+die( "<p>" . typogrify( "'This is the world that we live in Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'" ) . "</p>" );
 
 // Custom error handler
 function custom_error_handler($errno, $errstr, $errfile, $errline){
