@@ -22,54 +22,80 @@ function logged_in(){
 	}
 }
 
+function typogrify( $text, $its_a_heading = false ){
+	$text = htmlentities($text,ENT_NOQUOTES,"UTF-8",false);
+	if( !$its_a_heading )
+		$text = Markdown( $text );
+    $text = amp( $text );
+    $text = widont( $text );
+    $text = SmartyPants( $text );
+    $text = caps( $text );
+    $text = initial_quotes( $text );
+    $text = dash( $text );
+    
+    return $text;
+}
+
 // For use before entering data into the DB
-function escape( $string ){
-	$string = htmlentities($string,ENT_QUOTES,"UTF-8",false);
-	return sqlite_escape_string( $string );
+function escape( $text ){
+	$text = htmlentities($text,ENT_QUOTES,"UTF-8",false);
+	return sqlite_escape_string( $text );
 }
 
-function escape_typogrify( $string ){
-	$string = typogrify( $string );
-	return sqlite_escape_string( $string );
+function escape_typogrify( $text ){
+	$text = strip_tags( $text );
+	$text = typogrify( $text );
+	return sqlite_escape_string( $text );
 }
 
-// Undo the previous function
-// Don't call this on typogrify'd content
-function unescape( $string ){
-//	$string = stripslashes( $string );
-	$string = preg_replace("#'{2,}#", "'", $string);
-	return $string;
+function escape_heading( $text ){
+	$text = strip_tags( $text );
+	$text = typogrify( $text, true );
+	return sqlite_escape_string( $text );
+}
+
+function unescape( $text ){
+	$text = preg_replace("#'{2,}#", "'", $text);
+	return $text;
 }
 
 // Turns nasty slugs into nice ones
-function sluginate( $string, $sep = "_" ){
-	return trim( preg_replace("/[^a-z0-9]+/", $sep, strtolower( $string ) ), $sep );
+function sluginate( $text, $sep = "-" ){
+	return trim( preg_replace("/([^\w]|^the\s)+/i", $sep, strtolower( html_entity_decode( $text ) ) ), $sep );
 }
-
-die( "<p>" . typogrify( "'This is the world that we live in Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'" ) . "</p>" );
 
 // Custom error handler
 function custom_error_handler($errno, $errstr, $errfile, $errline){
+	if( !empty( $errline ) )
+		$errfile = ( substr( $errfile, 0, strlen(SITE_PATH) ) == SITE_PATH ) ? "/" . substr( $errfile, strlen(SITE_PATH) ) : $errfile;
+	$error_start = "<p style='margin:3px;color:#000;opacity:.6;border:1px solid #000;background:#eee;padding:3px 5px;font-family:\"Helvetica Neue\",Arial,sans-serif'>";
+	$error_end = "</p>";
 	switch ($errno) {
 	case E_USER_ERROR:
-		echo "<p style='font-family:\"Helvetica Neue\",Arial,sans-serif'>";
-		echo "<b>My ERROR</b> [$errno] $errstr<br />\n";
-		echo "	Fatal error on line $errline in file $errfile";
-		echo ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
-		echo "</p>";
-		exit(1);
+		echo $error_start;
+		echo "<b>Error</b>: [$errno] $errstr &mdash; ";
+		echo "Fatal error on line $errline in file $errfile";
+		echo ", PHP " . PHP_VERSION . " (" . PHP_OS . ")";
+		echo $error_end;
+		exit();
 		break;
 
 	case E_USER_WARNING:
-		echo "<b>My WARNING</b> [$errno] $errstr<br />\n";
+		echo $error_start;
+		echo "<b>Warning</b>: $errfile:$errline [$errno] $errstr";
+		echo $error_end;
 		break;
 
 	case E_USER_NOTICE:
-		echo "<b>My NOTICE</b> [$errno] $errstr<br />\n";
+		echo $error_start;
+		echo "<b>Notice</b>: $errfile:$errline [$errno] $errstr";
+		echo $error_end;
 		break;
 
 	default:
-		echo "Unknown error type: [$errno] $errstr<br />\n";
+//		echo $error_start;
+//		echo "<b>Unknown error type</b>: $errfile:$errline [$errno] $errstr";
+//		echo $error_end;
 		break;
 	}
 
@@ -83,14 +109,20 @@ function show_error($message, $level=E_USER_NOTICE) {
 	trigger_error( $message, $level );
 }
 
-function show_404(){
-	$t = new Template("error-page");
-	$t->set( "error_message", "Page Not Found" );
-	$t->set( "error_description", "The page you&rsquo;re looking for cannot be found." );
-	$t->render();
+function template_exists( $template_name ){
+	return file_exists( TEMPLATE_PATH . $template_name . ".php" );
 }
 
-function jsonReadable($json, $html=FALSE) { 
+function is_current( $slug ){
+	$r = Router::get_instance();
+	if( $slug == $r->slug ){
+		die("YES");
+	} else {
+		die("NO");
+	}
+}
+
+function json_readable($json, $html=FALSE) { 
 	$tabcount = 0; 
 	$result = ''; 
 	$inquote = false; 

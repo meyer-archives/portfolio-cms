@@ -1,4 +1,4 @@
-<?php if( !defined( "SITE_PATH" ) ) die( "Can't touch this." ); ?>
+<?php if( !defined( "BACON_IS_AWESOME" ) ) die( "Can't touch this." ); ?>
 <div id="secondary">
 	<ul id="project-link-list">
 	<?php

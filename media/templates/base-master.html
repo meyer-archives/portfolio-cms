@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+{% block head %}
+{% endblock %}
+
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
+
+<!-- if admin: -->
+	<link rel="stylesheet" type="text/css" href="{{ SYS_MEDIA_URL }}uploadify/uploadify.css" media="all">
+	<link rel="stylesheet" type="text/css" href="{{ SYS_MEDIA_URL }}css/admin.css" media="all">
+
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.timeago.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.idle-timer.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.localscroll.min.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.uniform.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.timers.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.quicksand.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.dataset.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}uploadify/swfobject.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/admin.js"></script>
+<!-- end if admin: -->
+
+</head>
+<body id="{{ body_id }}" class="{% if logged_in %}logged-in{% else %}logged-out{% endif %}">
+
+<div id="wrapper">
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</div><!-- #wrapper -->
+
+{% include "admin-bar.html" %}
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 
-if( !defined( "SITE_PATH" ) ) die( "Can't touch this." );
+if( !defined( "BACON_IS_AWESOME" ) ) die( "Can't touch this." );
 
 class Portfolio {
 	private $sqlite;
@@ -135,13 +135,6 @@ class Portfolio {
 		}
 	}
 
-/*
-	private function db_version_update(){
-		$time_now = time();
-		$this->meta("last_updated",$time_now);
-		return $time_now;
-	}
-*/
 	function meta( $k = false, $v = false ){
 		if( empty( $k ) ) {
 			return $this->meta;
@@ -220,7 +213,7 @@ class Portfolio {
 		$project_id = (int) $project_id;
 
 		$title_src = escape($title);
-		$title = escape_typogrify($title);
+		$title = escape_heading($title);
 		$desc_src = escape($desc);
 		$desc = escape_typogrify( $desc );
 		$order = 0;
@@ -289,7 +282,6 @@ class Portfolio {
 			$this->sqlite->beginTransaction();
 
 			foreach( $order as $item_order => $item_id ){
-//				$item_order += 100;
 				$this->sqlite->exec(sprintf( $query1, (int) $item_order, (int) $item_id ));
 				$this->sqlite->exec(sprintf( $query2, (int) $project_id, (int) $item_id ));
 			}
@@ -308,7 +300,7 @@ class Portfolio {
 			$query = "UPDATE portfolio_items SET %s = '%s' WHERE item_id = '$id';";
 
 			$title_src = escape($title);
-			$title = escape_typogrify($title);
+			$title = escape_heading($title);
 
 			$this->sqlite->beginTransaction();
 
@@ -327,7 +319,6 @@ class Portfolio {
 			$this->sqlite->exec(sprintf($query,"last_updated","DATETIME('NOW')"));
 
 			$this->sqlite->commit();
-//			$this->db_version_update();
 
 			$this->items_by_project[$pid][] = &$this->items_by_id[$id];
 			$this->items_by_id[$id] = array(
@@ -354,7 +345,6 @@ class Portfolio {
 
 	function item_delete( $id ){
 		$query = "DELETE FROM portfolio_items WHERE item_id = '$id'";
-//		$this->db_version_update();
 		if( $this->sqlite->exec($query) ){
 			return $this->item_by_id( $id );
 		} else {
@@ -368,9 +358,9 @@ class Portfolio {
 	///////////////////////////////////////////////////////
 
 	function project_add( $title ){
-		$slug = sluginate($title,"-");
+		$slug = sluginate($title);
 		$title_src = escape($title);
-		$title = escape_typogrify($title);
+		$title = escape_heading($title);
 
 		if( !empty( $this->projects_by_slug[$slug] ) )
 			$slug = $slug . "-" . substr( md5(time()), 0, 5 );
@@ -387,7 +377,6 @@ class Portfolio {
 			$slug
 		);
 
-//		$this->db_version_update();
 		if( $this->sqlite->exec( $query ) ) {
 			return array(
 				"id" => $this->sqlite->lastInsertId(),
@@ -408,12 +397,11 @@ class Portfolio {
 				$query = "UPDATE portfolio_projects SET %s = '%s' WHERE project_id = '%d';";
 
 				$title_src = escape($title);
-				$title = escape_typogrify($title);
+				$title = escape_heading($title);
 
 				$this->sqlite->exec(sprintf($query,"project_title",$title,$id));
 				$this->sqlite->exec(sprintf($query,"project_title_src",$title_src,$id));
 
-//				$this->db_version_update();
 				return array(
 					"id" => $id,
 					"title" => $title,
@@ -432,17 +420,15 @@ class Portfolio {
 		if( $id > 0 ){
 			$query = "DELETE FROM portfolio_projects WHERE project_id = '$id';";
 			$query2 = "UPDATE portfolio_items SET item_project = '0' WHERE item_project = '$id';";
-//			$this->db_version_update();
-			if(
-				$this->sqlite->exec($query) &&
-				$this->sqlite->exec($query2)
-			){
+
+			if($this->sqlite->exec($query)){
+				$this->sqlite->exec($query2);
 				return $this->project_by_id( $id );
 			} else {
 				return false;
 			}
 		} else {
-			show_error( "You can't delete project 0", E_USER_ERROR );
+			return false;
 		}
 	}
 

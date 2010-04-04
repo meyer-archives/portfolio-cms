@@ -1,6 +1,6 @@
 <?php
 
-if( !defined( "SITE_PATH" ) ) die( "Can't touch this." );
+if( !defined( "BACON_IS_AWESOME" ) ) die( "Can't touch this." );
 
 ?>
 <div id="primary">

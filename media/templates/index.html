@@ -1,1 +1,12 @@
-Can't touch this.
+{% extends 'base.html' %}
+{% block body %}
+	
+<ul class="project-list">
+{% for project in projects_by_id %}
+<li id='project-{{ project.id }}'>
+	<h3><a href='{{ project.url }}'>{{ project.title|safe }} ({{ project.id }})</a></h3>
+</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

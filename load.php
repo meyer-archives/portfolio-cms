@@ -2,46 +2,53 @@
 
 include( "config.php" );
 
-define( "SITE_PATH", dirname(__FILE__) . "/" );
-
-if( !MOD_REWRITE_ENABLED ){
-	// Not to be used for media (obviously)!!
-	define( "SITE_URL", "/index.php/" );
-} else {
-	define( "SITE_URL", "/" );
-}
-
-// API
-define( "API_URL", SITE_URL . "api/" );
-
-// Project prefix
-define( "PROJECT_PREFIX", "gallery/" ); // Prefix + trailing slash
-
-// Fix that dumb PHP warning
 date_default_timezone_set('America/New_York');
 
-// All user-generated files
-// It can be located anywhere, as long as it's writable and web-accessible
+if( get_magic_quotes_gpc() )
+	die( "magic_quotes is enabled, but should not be. <a href='http://bit.ly/86XywY'>Fix that problem</a>." );
+
+define( "SITE_PATH", dirname(__FILE__) . "/" );
+define( "SITE_URL", "/" );
+define( "API_URL", SITE_URL . "api/" );
+define( "PROJECT_PREFIX", "gallery/" );
+
 define( "STORAGE_URL", "/storage/" );
 define( "STORAGE_PATH", SITE_PATH . "storage/" );
 
-// Files accessed through the browser
 define( "IMAGE_PATH", STORAGE_PATH . "images/" );
 define( "IMAGE_URL", STORAGE_URL . "images/" );
 
-// System Stuff
 define( "SYS_PATH", SITE_PATH . "system/" );
 
-// User Media
 define( "MEDIA_URL", "/media/" );
 define( "MEDIA_PATH", SITE_PATH . "media/" );
 define( "TEMPLATE_PATH", MEDIA_PATH . "templates/" );
 
-// System Media URL
 define( "SYS_MEDIA_URL", "/system/media/" );
 define( "SYS_MEDIA_PATH", SITE_PATH . "system/media/" );
 
-// Includes path
 define( "INCLUDES_PATH", SYS_PATH . "includes/" );
+
+// Load third-party classes and functions
+include_once( INCLUDES_PATH . "typogrify/smartypants.php" );
+include_once( INCLUDES_PATH . "typogrify/typogrify.php" );
+include_once( INCLUDES_PATH . "typogrify/markdown.php" );
+include_once( INCLUDES_PATH . "wideimage/WideImage.php" );
+
+// Load the functions
+include_once( INCLUDES_PATH . "functions.php" );
+
+// Load the classes
+include_once( INCLUDES_PATH . "class.base.php" );
+include_once( INCLUDES_PATH . "class.router.php" );
+include_once( INCLUDES_PATH . "class.db.php" );
+include_once( INCLUDES_PATH . "class.portfolio.php" );
+include_once( INCLUDES_PATH . "h2o/h2o.php" );
+include_once( INCLUDES_PATH . "class.template.php" );
+include_once( INCLUDES_PATH . "tags.php" );
+include_once( INCLUDES_PATH . "class.cache.php" );
+
+// Route the request
+$router = Router::get_instance();
 
 ?>

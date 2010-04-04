@@ -1,34 +1,228 @@
-/* @override http://local.cassialeidigh.com/media/css/site.css */
+/* @override http://cooper.local:7777/media/css/site.css */
 
-/* YUI Compressed Reset CSS */
-html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
+/* @group CSS Reset */
 
-h1,h2,h3,h4,h5,h6{
-  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
 }
 
-h1{
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* @end */
+
+
+
+body{
+	color: #fff;
+	font-family: Palatino, Baskerville, Georgia, "Times New Roman", Times, serif;
+	letter-spacing: 1px;
+	background: #000 url(../images/background.jpg) no-repeat left top;
+}
+
+a {
+	color: #AAA;
+}
+
+#header h1{
+	line-height: 170px;
+	height: 170px;
+	position: relative;
+	font-style: italic;
+}
+
+#header h1 a{
+	position: absolute;
+	color: transparent;
+	width: 526px;
+	height: 128px;
+	display: block;
+	background: url(../images/header-text.jpg) no-repeat;
+	top: 36px;
+	left: 37px;
+	text-indent: -2180px;
+}
+
+h2{
 	font-size: 24px;
+	height: 50px;
+	line-height: 55px;
+	font-style: italic;
 }
 
-#wrapper{
+p{
+	line-height: 1.5em;
+	font-size: 16px;
+	margin-bottom: 14px;
+	letter-spacing: 0;
 }
-
-body,html{
-	height: 100%;
-}
-
-.container{
-	width: 960px;
-	margin: 0 auto;
-}
-
 #content{
-}
-
-#header{
+	margin: 25px 0 25px 50px;
 
 }
 
-#footer{
+
+ul#menu{
+	height: 30px;
+	line-height: 30px;
+	padding-left: 50px;
+	background: #000;
+	background: rgba(0,0,0,0.7);
+	width: 960px;
+}
+
+ul#menu li{
+	display: inline;
+	margin-right: 20px;
+}
+
+ul#menu li a{
+	color: #FFF;
+	display: block;
+	float: left;
+	height: 29px;
+	line-height: 32px;
+	text-decoration: none;
+	padding: 0 10px;
+	margin-right: 2px;
+	text-transform: uppercase;
+	font-size: 14px;
+	letter-spacing: 2px;
+}
+
+ul#menu li a:hover{
+	border-bottom: 2px solid #555;
+}
+
+ul#menu li.current a{
+	border-bottom: 2px solid #FFF;
+}
+
+ul#thumbs li{
+	display: block;
+	float: left;
+	margin: 0 8px 8px 0;
+	height: 100px;
+	overflow: hidden;
+}
+
+ul#thumbs li a{
+	border-bottom: none;
+}
+
+ul#thumbs li img{
+	-webkit-box-shadow: 0px 5px 15px #000;
+}
+
+.primary,
+.secondary{
+	margin-bottom: 50px;
+	position: relative;
+}
+
+p.quote{
+	text-align: right;
+	position: relative;
+	font-style: italic;
+	line-height: 38px;
+	font-size: 36px;
+	padding-right: 10px;
+}
+
+small{
+	font-size: 12px;
+	font-weight: normal;
+	font-style: normal;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+p.quote small{
+	position: absolute;
+	bottom: -35px;
+	right: 7px;
+}
+
+body.home .secondary small{
+	position: absolute;
+	bottom: -21px;
+	left: 6px;
+}
+
+body.home .primary{
+	width: 310px;
+	float:left;
+	margin-right:10px;
+}
+
+body.home .secondary{
+	width: 630px;
+	float: left;
+}
+
+body.about .primary{
+	width: 740px;
+	float:left;
+	margin-right:10px;
+}
+
+body.about .secondary{
+	width: 200px;
+	float: left;
+	margin-top: 50px;
+}
+
+#content a{
+	text-decoration: none;
+	border-bottom: 1px dotted #b2b2b2;
+}
+
+#content a:hover{
+	text-decoration: none;
+	border-bottom-style: dotted;
+	border-bottom-width: 1px;
 }

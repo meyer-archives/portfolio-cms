@@ -1,0 +1,50 @@
+<div id="admin-bar">
+	<div id="ab-shadow"></div>
+	<div id="ab-container">
+		<div id="ab-project-list" class="ab-list">
+			<div class="ab-list-header">
+				<h1>Projects</h1>
+				<a href="#" title="Add new project" id="ab-add-project" class="ab-add-button"><span>Add project</span></a>
+			</div>
+			<div class="ab-list-container">
+				<ul class="ab-listview">
+{% for project in projects_by_id %}
+					<li class='project ab-list-item' data-pid='{{ project.id }}'>
+						<h2>{{ project.title|safe }}</h2>
+						<ul class='options'>
+							<li class='ab-li-item view-project'><a href='#'>View project {{ project.id }}</a></li>
+							<li class='ab-li-item edit-project'><a href='#'>Edit project {{ project.id }}</a></li>
+							<li class='ab-li-item delete-project'><a href='{{ project.url }}'>Delete project {{ project.id }}</a></li>
+							<li class='ab-li-item sort-handle'><span>Reorder</span></li>
+						</ul>
+					</li>
+{% endfor %}
+				</ul>
+				<div class="ab-listview-end-cap">
+				</div>
+			</div>
+			<div class="ab-list-footer">
+			</div>
+		</div>
+		<div id="ab-item-list" class="ab-list">
+			<div class="ab-list-header">
+				<h1>Project Title</h1>
+				<a href="#" title="Add new project" id="ab-show-project-list" class="ab-add-button"><span>Add item</span></a>
+			</div>
+			<div class="ab-list-container">
+				<ul class="ab-listview">
+					<li class="ab-list-item">Item 1</li>
+					<li class="ab-list-item">Item 2</li>
+					<li class="ab-list-item">Item 3</li>
+					<li class="ab-list-item">Item 4</li>
+					<li class="ab-list-item">Item 5</li>
+					<li class="ab-list-item">Item 6</li>
+					<li class="ab-list-item">Item 7</li>
+				</ul>
+				<div class="ab-listview-end-cap"></div>
+			</div>
+			<div class="ab-list-footer">
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simpleviewergallery
+	maxImageWidth="600"
+	maxImageHeight="500"
+	textColor="0xFFFFFF"
+	frameColor="0xFFFFFF"
+	frameWidth="5"
+	stagePadding="40"
+	navPadding="40"
+	thumbnailColumns="6"
+	thumbnailRows="5"
+	navPosition="right"
+	vAlign="center"
+	hAlign="center"
+	title=""
+	enableRightClickOpen="true"
+	backgroundImagePath=""
+	imagePath=""
+	thumbPath="">
+	<image>
+		<filename>01.jpg</filename>
+		<caption></caption>	
+	</image>
+</simpleviewergallery>

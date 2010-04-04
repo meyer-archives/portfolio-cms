@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+CassiaLeidigh.com{% if page_title %} &rsaquo; {{ page_title }}{% endif %}
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" media="all">
+<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
+
+{% endblock %}
+
+{% block header %}
+<div id="wrapper-inner">
+	<div id="header">
+		<h1><a href="/">The Portfolio of Cassia Leidigh</a></h1>
+	</div>
+	<ul id="menu">
+		{% nav index %}
+		{% nav gallery, 12 %}
+		{% nav about %}
+	</ul>
+	<div id="content">	
+{% endblock %}
+
+{% block footer %}
+	</div><!-- #content -->
+</div><!-- #wrapper-inner -->
+{% endblock %}

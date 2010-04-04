@@ -5,8 +5,8 @@
 */
 class Router{
 	private static $instance;
-	private $format;
-	private $url;
+	public $format;
+	public $slug;
 	private $called_function;
 
 	public static function &get_instance() {
@@ -24,25 +24,27 @@ class Router{
 		if( substr( $url_string , 0, 9) == "index.php" )
 			$url_string = trim( substr( $url_string , 10), "/" );
 
-		// "": index
-		// "gallery/aviator-project": project_single
-		// "go/1": short_url
+		// ""							catchall_route
+		// "about"						catchall_route
+		// "gallery/aviator-project"	project_single
+		// "go/1"						project_short_url => prorject_single
+		// "api/*"						project/item
 
 		// Response format
 		$url_parts = explode( ".", $url_string );
 
 		if( sizeof( $url_parts ) == 1 ){
-			$this->url = strtolower( $url_parts[0] ); // path/to/method/1
+			$this->slug = strtolower( $url_parts[0] ); // path/to/method/1
 			$this->format = "html"; // format
 		} elseif( sizeof( $url_parts ) == 2 ){
-			$this->url = strtolower( $url_parts[0] ); // path/to/method/1
+			$this->slug = strtolower( $url_parts[0] ); // path/to/method/1
 			$this->format = strtolower( $url_parts[1] ); // format
 		} else {
-			show_404();
+			// 404
 		}
 
 		$patterns = array(
-			// Home (empty string)
+			// Project Short URL
 			'project_short_url'=>'#^go\/(?P<project_id>\d+)$#i',
 
 			// API
@@ -58,15 +60,17 @@ class Router{
 			'project_add'=>'#^api/project/add$#i',
 			'project_delete'=>'#^api/project/delete$#i',
 
-			// Publish (will eventually be replaced)
+			// Publish (will eventually be replaced/removed)
 			'publish'=>'#^api/publish$#i',
 
 			// Miscellaneous
 			'logout'=>'#^logout$#i',
 
-			// Catchall
+			// Projects
 			'project_route'=>'#^'.PROJECT_PREFIX.'(?P<project_slug>.*+)$#i',
-			'page_route'=>'#^(?P<url_string>.*+)$#i' // Single-level 
+
+			// Catchall
+			'catchall_route'=>'#^(?P<url_string>.*+)$#i'
 		);
 
 		for(
@@ -74,7 +78,7 @@ class Router{
 			current($patterns);
 			next($patterns)
 		){
-			if( preg_match( current($patterns), $this->url, $matched_data ) ) {
+			if( preg_match( current($patterns), $this->slug, $matched_data ) ) {
 				$this->called_function = key($patterns);
 				call_user_func(array(
 					$this,
@@ -84,15 +88,6 @@ class Router{
 				break; // only run until it matches
 			}
 		}
-	}
-
-	private function goto( $location = false ){
-		if( !$location ){
-			header( "Location: " . API_URL . "projects.html" );
-		} else {
-			header( "Location: " . API_URL . $location );
-		}
-		exit;
 	}
 
 	private function return_data( $status, $status_msg, $data = array() ){
@@ -111,7 +106,20 @@ class Router{
 
 			case "html":
 
-			die( "<pre>" . htmlspecialchars(print_r( $data, 1 )) );
+			if( !empty( $data ) ){
+				$data_html = "";
+				foreach( $data as $s => $row )
+					$data_html .= $s . " => " . $row . "<br>";
+
+				$data = print_r( $data, 1 );
+			} else {
+				$data = "None";
+				$data_html = "None";
+			}
+
+			echo "<pre>" . htmlentities( "Status\n==========\n" . $status . " - " . $status_msg . "\n\nData\n==========\n" . $data ) . "</pre>";
+//			echo $data_html;
+			exit;
 
 			break;
 
@@ -123,39 +131,36 @@ class Router{
 
 	private function project_route( $args ){
 		$p = Portfolio::get_instance();
-		if( $current_project = $p->project_by_slug($args["project_slug"]) ) {
+
+		if( $current_project = $p->project_by_slug( $args["project_slug"] ) ) {
 			$t = new Template("project-single");
 			$t->set("current_project",$current_project);
 			$t->render();
 		} else {
-			$t = new Template("error-page");
-			$t->set( "status_code", 404 );
-			$t->set( "error_message", "Page not found" );
-			$t->set( "error_details", "The page you are looking for could not be found." );
-			$t->set( "page_title", "Page not found" );
+			$t = new Template("error");
+			$t->set( "page_title", "Project Not Found" );
+			$t->set( "error_message", "Project not found" );
+			$t->set( "error_details", "The project you were looking for could not be found" );
 			$t->render();
 		}
 	}
 
-	private function page_route( $args ){
+	private function catchall_route( $args ){
 		$p = Portfolio::get_instance();
 		if( empty( $args["url_string"] ) ){
-			$t = new Template("project-list");
-			$t->render();
+			$t = new Template("index");
 		} else {
-			$t = new Template("error-page");
-			$t->set( "status_code", 404 );
-			$t->set( "error_message", "Page not found" );
-			$t->set( "error_details", "The page you are looking for could not be found." );
-			$t->set( "page_title", "Page not found" );
-			$t->render();
+			$t = new Template("page-".$args["url_string"]);
 		}
+		$t->render();
 	}
 
 	function project_short_url( $args ){
 		$p = Portfolio::get_instance();
-		if( $p->project_by_id($args["project_id"]) ){
-			die( "Project {$args["project_id"]} exists" );
+		if( $project = $p->project_by_id($args["project_id"]) ){
+			header( "Location: ". $project["url"] );
+			exit;
+//			die( "Project {$args["project_id"]} exists" );
 		} else {
 			die( "Project {$args["project_id"]} does not exist" );
 		}
@@ -203,7 +208,10 @@ class Router{
 
 	function items_by_project( $args ){
 		if( empty( $_GET["project_id"] ) )
-			show_error( '$_GET["project_id"] must be set for items_by_project()', E_USER_ERROR );
+			$this->return_data(
+				"error",
+				'$_GET["project_id"] must be set for items_by_project()'
+			);
 		$pid = $_GET["project_id"];
 
 		$p = Portfolio::get_instance();
@@ -237,7 +245,7 @@ class Router{
 					"success",
 					"All items from project {$pid} successfully fetched",
 					array(
-						"current_project"=>$current_project,
+						"project"=>$current_project,
 						"items"=>$p->items_by_project($current_project["id"])
 					)
 				);
@@ -255,7 +263,7 @@ class Router{
 					"success",
 					"All items from project '$pslug' successfully fetched",
 					array(
-						"current_project"=>$current_project,
+						"project"=>$current_project,
 						"items"=>$p->items_by_project($current_project["id"])
 					)
 				);
@@ -280,7 +288,10 @@ class Router{
 
 	function item_single( $args ){
 		if( empty( $_GET["item_id"] ) )
-			show_error( '$_GET["item_id"] must be set for item_single()', E_USER_ERROR );
+			$this->return_data(
+				"error",
+				'$_GET["item_id"] must be set for item_single()'
+			);
 
 		$p = Portfolio::get_instance();
 		$id = $_GET["item_id"];
@@ -402,7 +413,10 @@ class Router{
 
 	function item_delete( $args ){
 		if( empty( $_GET["item_id"] ) )
-			show_error( '$_GET["item_id"] must be set for item_delete()', E_USER_ERROR );
+			$this->return_data(
+				"error",
+				'$_GET["item_id"] must be set for item_delete()'
+			);
 		$id = $_GET["item_id"];
 
 		$p = Portfolio::get_instance();
@@ -501,15 +515,18 @@ class Router{
 			$slug = $_GET["project_slug"];
 			$project = $p->project_by_slug($slug);
 		} else {
-			show_error( '$_GET["project_id"] or $_GET["project_slug"] must be set for project_single()', E_USER_ERROR );
+			$this->return_data(
+				"error",
+				'$_GET["project_id"] or $_GET["project_slug"] must be set for project_single()'
+			);
 		}
 
 		if( !empty( $project ) ) {
 
 			$items = $p->items_by_project( $project["id"] );
 
-//			$item_count = $items ? count( $items ) : 0;
-//			$project["item_count"] = $item_count;
+			if( empty( $items ) )
+				$items = array();
 
 			$this->return_data(
 				"success",
@@ -521,7 +538,7 @@ class Router{
 			);
 		} else {
 			$error = "id of ".( (int) $id );
-			if( $slug ) $error = "slug of '" . htmlentities($slug) . "'";
+			if( $slug ) $error = "slug of '" . htmlentities($slug,ENT_QUOTES) . "'";
 
 			$this->return_data(
 				"error",
@@ -552,28 +569,45 @@ class Router{
 	}
 
 	function project_delete( $args ){
+		$p = Portfolio::get_instance();
+
 		if( empty( $_GET["project_id"] ) )
-			show_error( '$_GET["project_id"] must be set for project_delete()', E_USER_ERROR );
-		$id = $_GET["project_id"];
-		if( $deleted_project = $portfolio->project_delete($id) ){
 			$this->return_data(
-				"success",
-				"Project $id successfully deleted",
-				array(
-					"deleted_project" => $deleted_project
-				)
+				"error",
+				'$_GET["project_id"] must be set for project_delete()'
 			);
+
+		$id = (int) $_GET["project_id"];
+
+		if( $p->project_by_id( $id ) ) {
+			if( $deleted_project = $p->project_delete($id) ){
+				$this->return_data(
+					"success",
+					"Project $id successfully deleted",
+					array(
+						"deleted_project" => $deleted_project
+					)
+				);
+			} else {
+				$this->return_data(
+					"error",
+					"There was an error deleting item $id"
+				);
+			}
 		} else {
 			$this->return_data(
 				"error",
-				"There was an error deleting item $id"
+				"Project $id does not exist"
 			);
 		}
 	}
 
 	function project_save( $args ){
 		if( empty( $_GET["project_id"] ) )
-			show_error( '$_GET["project_id"] must be set for project_save()', E_USER_ERROR );
+			$this->return_data(
+				"error",
+				'$_GET["project_id"] must be set for project_save()'
+			);
 		$id = $_GET["project_id"];
 		if( empty( $_POST["project_title"] ) ){
 			$this->return_data(
