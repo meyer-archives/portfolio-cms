@@ -60,10 +60,11 @@ $(document).ready(function() {
 	$$.w.bind('resize', function() {
 	    if($$.resizeTimer){
 			clearTimeout($$.resizeTimer);
-		} else {
-			$$.b.addClass("resizing");
-			$$.l.css("height","100%");
 		}
+
+		$$.b.addClass("resizing");
+		$$.l.css("height","100%");
+
 		$$.resizeTimer = setTimeout(resizeListview, 100);
 	});
 

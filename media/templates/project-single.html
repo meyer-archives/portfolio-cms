@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block page_title %}{{ current_project.title }}{% endblock %}
 {% block body %}
-<h1>Project {{ current_project.id }} &mdash; {{ current_project.title|safe }}</h1>
+<h1>Project {{ current_project.id }} &mdash; {{ current_project.title }}</h1>
 {% endblock %}

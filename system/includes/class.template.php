@@ -5,12 +5,22 @@ class Template {
 	private static $data = array();
 	private static $template_name;
 	private static $format;
+	private static $twig;
 
 	public function __construct( $name = false ){
 		$p = Portfolio::get_instance();
 //		$r = Router::get_instance();
 
 		self::$format = "html";
+
+		Twig_Autoloader::register();
+
+		$loader = new Twig_Loader_Filesystem(TEMPLATE_PATH);
+		self::$twig = new Twig_Environment($loader, array(
+			'cache' => STORAGE_PATH . "cache/",
+			'debug' => true,
+			'auto_reload' => true
+		));
 
 		self::set( 'items_by_id', $p->items_by_id() );
 		self::set( 'items_by_project', $p->items_by_project() );
@@ -47,15 +57,9 @@ class Template {
 			}
 		}
 
-		$h2o = new h2o(
-			self::$template_name . "." . self::$format,
-			array(
-				"searchpath" => TEMPLATE_PATH,
-				"cache" => false, // default "file"
-				"cache_dir" => SITE_PATH . "storage/cache/"
-			)
-		);
-		echo $h2o->render(self::$data);
+		$template = self::$twig->loadTemplate( self::$template_name . "." . self::$format );
+		echo $template->render( self::$data );
+
 		exit();
 	}
 }

@@ -43,7 +43,7 @@ include_once( INCLUDES_PATH . "class.base.php" );
 include_once( INCLUDES_PATH . "class.router.php" );
 include_once( INCLUDES_PATH . "class.db.php" );
 include_once( INCLUDES_PATH . "class.portfolio.php" );
-include_once( INCLUDES_PATH . "h2o/h2o.php" );
+include_once( INCLUDES_PATH . "twig/Autoloader.php" );
 include_once( INCLUDES_PATH . "class.template.php" );
 include_once( INCLUDES_PATH . "tags.php" );
 include_once( INCLUDES_PATH . "class.cache.php" );

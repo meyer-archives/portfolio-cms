@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
+{% block page_title %}Home{% endblock page_title %}
 {% block body %}
 	
-<ul class="project-list">
-{% for project in projects_by_id %}
-<li id='project-{{ project.id }}'>
-	<h3><a href='{{ project.url }}'>{{ project.title|safe }} ({{ project.id }})</a></h3>
-</li>
-{% endfor %}
-</ul>
+<div class="statement-preview">
+	<p class="quote">&ldquo;My artwork communicates my interest in the beautiful things around&nbsp;me&rdquo;</p>
+	<p class="preview-link"><a href="/about/">Read more about Cassia</a>&nbsp;&rsaquo;</p>
+</div>
+<div class="gallery-preview">
+	<ul id="thumbs">
+		<li><img src=""></li>
+		<li><img src=""></li>
+		<li><img src=""></li>
+		<li><img src=""></li>
+		<li><img src=""></li>
+		<li><img src=""></li>
+		<li><img src=""></li>
+	</ul>
+	<p class="preview-link"><a href="/gallery/">View the gallery</a>&nbsp;&rsaquo;</small>
+</div>
 
 {% endblock %}

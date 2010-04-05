@@ -10,7 +10,7 @@
 				<ul class="ab-listview">
 {% for project in projects_by_id %}
 					<li class='project ab-list-item' data-pid='{{ project.id }}'>
-						<h2>{{ project.title|safe }}</h2>
+						<h2>{{ project.title }}</h2>
 						<ul class='options'>
 							<li class='ab-li-item view-project'><a href='#'>View project {{ project.id }}</a></li>
 							<li class='ab-li-item edit-project'><a href='#'>Edit project {{ project.id }}</a></li>
