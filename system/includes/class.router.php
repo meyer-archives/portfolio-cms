@@ -48,6 +48,9 @@ class Router{
 		} elseif( sizeof( $url_parts ) == 2 ){
 			$this->url->slug = strtolower( $url_parts[0] ); // path/to/method/1
 			$this->url->format = strtolower( $url_parts[1] ); // format
+			if( $this->url->format == "html" ){
+				// 404
+			}
 		} else {
 			// 404
 		}

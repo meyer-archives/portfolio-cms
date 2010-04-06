@@ -113,4 +113,8 @@ $(document).ready(function() {
 	$("#ab-project-list .view-project a").click(function(){
 		$(this).trigger("viewProject");
 	});
+
+	$("#wrapper").block({
+		"message": "<h1>Reload Frame</h1>"
+	});
 });
