@@ -7,6 +7,7 @@ class Router{
 	private static $instance;
 	public $format;
 	public $slug;
+	public $url;
 	private $called_function;
 
 	public static function &get_instance() {
@@ -16,10 +17,18 @@ class Router{
 	}
 
 	private function __construct(){
+		$this->url = (object) array(
+			"slug" => false,
+			"format" => false,
+			"called_function" => false,
+			"matched_data" => false,
+			"routed" => false
+		);
+
 		$url_string = $_SERVER["REQUEST_URI"]; // /path/to/method/1.format?a=b
 		$url_string = explode("?",$url_string); // /path/to/method/1.format
 		$url_string = trim( $url_string[0], "/" ); // path/to/method/1.format
-		
+	
 		// Trim off "index.php" if it's there
 		if( substr( $url_string , 0, 9) == "index.php" )
 			$url_string = trim( substr( $url_string , 10), "/" );
@@ -28,17 +37,17 @@ class Router{
 		// "about"						catchall_route
 		// "gallery/aviator-project"	project_single
 		// "go/1"						project_short_url => prorject_single
-		// "api/*"						project/item
+		// "api"						adding/removing projects or items
 
 		// Response format
 		$url_parts = explode( ".", $url_string );
 
 		if( sizeof( $url_parts ) == 1 ){
-			$this->slug = strtolower( $url_parts[0] ); // path/to/method/1
-			$this->format = "html"; // format
+			$this->url->slug = strtolower( $url_parts[0] ); // path/to/method/1
+			$this->url->format = "html"; // format
 		} elseif( sizeof( $url_parts ) == 2 ){
-			$this->slug = strtolower( $url_parts[0] ); // path/to/method/1
-			$this->format = strtolower( $url_parts[1] ); // format
+			$this->url->slug = strtolower( $url_parts[0] ); // path/to/method/1
+			$this->url->format = strtolower( $url_parts[1] ); // format
 		} else {
 			// 404
 		}
@@ -78,20 +87,30 @@ class Router{
 			current($patterns);
 			next($patterns)
 		){
-			if( preg_match( current($patterns), $this->slug, $matched_data ) ) {
-				$this->called_function = key($patterns);
-				call_user_func(array(
-					$this,
-					$this->called_function
-				), $matched_data
-				);
+			if( preg_match( current($patterns), $this->url->slug, $matched_data ) ) {
+				$this->url->called_function = key($patterns);
+				$this->url->matched_data = $matched_data;
 				break; // only run until it matches
 			}
+		}
+
+	}
+
+	public function route(){
+		if( !$this->url->routed ) {
+			call_user_func(array(
+				$this,
+				$this->url->called_function
+			), $this->url->matched_data
+			);
+			$this->url->routed = true;
+		} else {
+			throw new Exception("URL has already been routed", 1);
 		}
 	}
 
 	private function return_data( $status, $status_msg, $data = array() ){
-		switch( $this->format ) {
+		switch( $this->url->format ) {
 			case "json":
 
 			header("Content-type: application/javascript");
@@ -124,7 +143,7 @@ class Router{
 			break;
 
 			default:
-			echo "Format '{$this->format}' has not been implemented.";
+			echo "Format '{$this->url->format}' has not been implemented.";
 			break;
 		}
 	}

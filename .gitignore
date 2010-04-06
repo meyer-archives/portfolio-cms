@@ -1,5 +1,5 @@
 .DS_Store
-storage/cache.php
+storage/cache/
 storage/images
 storage/originals
 storage/*.sqlite3

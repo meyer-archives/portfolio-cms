@@ -9,18 +9,9 @@ class Template {
 
 	public function __construct( $name = false ){
 		$p = Portfolio::get_instance();
-//		$r = Router::get_instance();
+		$r = Router::get_instance();
 
-		self::$format = "html";
-
-		Twig_Autoloader::register();
-
-		$loader = new Twig_Loader_Filesystem(TEMPLATE_PATH);
-		self::$twig = new Twig_Environment($loader, array(
-			'cache' => STORAGE_PATH . "cache/",
-			'debug' => true,
-			'auto_reload' => true
-		));
+		self::$format = $r->url->format;
 
 		self::set( 'items_by_id', $p->items_by_id() );
 		self::set( 'items_by_project', $p->items_by_project() );
@@ -50,6 +41,7 @@ class Template {
 	}
 
 	public static function render(){
+		global $twig;
 		if( !empty( self::$data['status_code'] ) ){
 			switch( self::$data['status_code'] ){
 				case 404:
@@ -57,7 +49,7 @@ class Template {
 			}
 		}
 
-		$template = self::$twig->loadTemplate( self::$template_name . "." . self::$format );
+		$template = $twig->loadTemplate( self::$template_name . "." . self::$format );
 		echo $template->render( self::$data );
 
 		exit();

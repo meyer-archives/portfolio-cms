@@ -45,10 +45,22 @@ include_once( INCLUDES_PATH . "class.db.php" );
 include_once( INCLUDES_PATH . "class.portfolio.php" );
 include_once( INCLUDES_PATH . "twig/Autoloader.php" );
 include_once( INCLUDES_PATH . "class.template.php" );
-include_once( INCLUDES_PATH . "tags.php" );
 include_once( INCLUDES_PATH . "class.cache.php" );
+
+Twig_Autoloader::register();
+$loader = new Twig_Loader_Filesystem(TEMPLATE_PATH);
+$twig = new Twig_Environment( $loader , array(
+	'cache' => STORAGE_PATH . "cache/",
+	'debug' => true,
+	'auto_reload' => true
+));
+
+// Twig tags & filters
+include_once( INCLUDES_PATH . "tags.php" );
 
 // Route the request
 $router = Router::get_instance();
+
+$router->route();
 
 ?>
