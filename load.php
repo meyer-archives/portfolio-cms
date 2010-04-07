@@ -2,8 +2,6 @@
 
 include( "config.php" );
 
-date_default_timezone_set('America/New_York');
-
 if( get_magic_quotes_gpc() )
 	die( "magic_quotes is enabled, but should not be. <a href='http://bit.ly/86XywY'>Fix that problem</a>." );
 
@@ -27,7 +25,7 @@ define( "TEMPLATE_PATH", MEDIA_PATH . "templates/" );
 define( "SYS_MEDIA_URL", "/system/media/" );
 define( "SYS_MEDIA_PATH", SITE_PATH . "system/media/" );
 
-define( "INCLUDES_PATH", SYS_PATH . "includes/" );
+define( "INCLUDES_PATH", SYS_PATH . "classes/" );
 
 // Load third-party classes and functions
 include_once( INCLUDES_PATH . "typogrify/smartypants.php" );
@@ -36,27 +34,30 @@ include_once( INCLUDES_PATH . "typogrify/markdown.php" );
 include_once( INCLUDES_PATH . "wideimage/WideImage.php" );
 
 // Load the functions
-include_once( INCLUDES_PATH . "functions.php" );
+include_once( SYS_PATH . "functions.php" );
 
 // Load the classes
-include_once( INCLUDES_PATH . "class.base.php" );
-include_once( INCLUDES_PATH . "class.router.php" );
-include_once( INCLUDES_PATH . "class.db.php" );
-include_once( INCLUDES_PATH . "class.portfolio.php" );
+include_once( INCLUDES_PATH . "base.php" );
+include_once( INCLUDES_PATH . "router.php" );
+include_once( INCLUDES_PATH . "db.php" );
+include_once( INCLUDES_PATH . "portfolio.php" );
 include_once( INCLUDES_PATH . "twig/Autoloader.php" );
-include_once( INCLUDES_PATH . "class.template.php" );
-include_once( INCLUDES_PATH . "class.cache.php" );
+include_once( INCLUDES_PATH . "template.php" );
+include_once( INCLUDES_PATH . "cache.php" );
 
 Twig_Autoloader::register();
 $loader = new Twig_Loader_Filesystem(TEMPLATE_PATH);
 $twig = new Twig_Environment( $loader , array(
-	'cache' => STORAGE_PATH . "cache/",
+	'cache' => false,//STORAGE_PATH . "cache/",
 	'debug' => true,
-	'auto_reload' => true
+	'auto_reload' => true,
+	'base_template_class' => 'Template_Extras'
 ));
 
-// Twig tags & filters
-include_once( INCLUDES_PATH . "tags.php" );
+// Twig Tags
+include_once( SYS_PATH . "tags.php" );
+
+$twig->addExtension(new Twig_Extras());
 
 // Route the request
 $router = Router::get_instance();

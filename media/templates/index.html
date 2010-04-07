@@ -8,13 +8,11 @@
 </div>
 <div class="gallery-preview">
 	<ul id="thumbs">
-		<li><img src=""></li>
-		<li><img src=""></li>
-		<li><img src=""></li>
-		<li><img src=""></li>
-		<li><img src=""></li>
-		<li><img src=""></li>
-		<li><img src=""></li>
+		{% for item in items_by_id %}
+			<li><img src="{{ item }}"></li>
+		{% else %}
+			<li>No images</li>
+		{% endfor %}
 	</ul>
 	<p class="preview-link"><a href="/gallery/">View the gallery</a>&nbsp;&rsaquo;</small>
 </div>

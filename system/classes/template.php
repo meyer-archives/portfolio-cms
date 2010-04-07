@@ -20,6 +20,7 @@ class Template {
 
 		self::set( 'MEDIA_URL', MEDIA_URL );
 		self::set( 'SYS_MEDIA_URL', SYS_MEDIA_URL );
+		self::set( 'API_URL', API_URL );
 
 		if( file_exists( TEMPLATE_PATH . $name . "." . self::$format ) ){
 			self::$template_name = $name;

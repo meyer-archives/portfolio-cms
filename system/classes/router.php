@@ -8,6 +8,7 @@ class Router{
 	public $format;
 	public $slug;
 	public $url;
+	private $routed = false;
 	private $called_function;
 
 	public static function &get_instance() {
@@ -21,8 +22,7 @@ class Router{
 			"slug" => false,
 			"format" => false,
 			"called_function" => false,
-			"matched_data" => false,
-			"routed" => false
+			"matched_data" => false
 		);
 
 		$url_string = $_SERVER["REQUEST_URI"]; // /path/to/method/1.format?a=b
@@ -100,13 +100,13 @@ class Router{
 	}
 
 	public function route(){
-		if( !$this->url->routed ) {
+		if( !$this->routed ) {
 			call_user_func(array(
 				$this,
 				$this->url->called_function
 			), $this->url->matched_data
 			);
-			$this->url->routed = true;
+			$this->routed = true;
 		} else {
 			throw new Exception("URL has already been routed", 1);
 		}
@@ -358,45 +358,79 @@ class Router{
 			if( !empty($_POST["item_project"] ) )
 				$project = escape( $_POST["item_project"] );
 
-			$inserted_item = $p->item_add(
+/*			$inserted_item = $p->item_add(
 				$title,
 				$desc,
 				$project
 			);
+*/
+			$inserted_item = array(
+				"id"=>815
+			);
 
-			$watermark = WideImage::load(SITE_PATH . "storage/watermark.png");
+			$original = $image->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_orig.jpg");
+			$clear_img = WideImage::load(SYS_MEDIA_PATH . "images/clear.png");
+			if( ADD_WATERMARK ) $watermark = WideImage::load(MEDIA_PATH . "images/" . WATERMARK_IMG);
 
-			$thumb = $image->resize(50, 50, "outside")->crop("50%-25","50%-25",50,50);
-			$thumb_100 = $image->resize(100, 100, "outside")->crop("50%-50","50%-50",100,100);
-			$thumb_hover = $image->resize(50, 50, "inside")->crop("50%-25","50%-25",50,50);
-			$thumb_h = $thumb_hover->getHeight();
-			$thumb_w = $thumb_hover->getWidth();
+			$orig_h = $image->getHeight();
+			$orig_w = $image->getWidth();
+			$orig_hyp = sqrt( $orig_h*$orig_h + $orig_w*$orig_w );
 
-			if( $thumb_h == 50 ){
-				// Portait image
-				$h_offset = 50;
-				$w_offset = 25-($thumb_w/2);
+			// Generate thumbnails
+			$thumb_ratio = THUMBNAIL_MAX/$orig_hyp;
+			$thumb_h = round($orig_h * $thumb_ratio);
+			$thumb_w = round($orig_w * $thumb_ratio);
+			$thumb_hyp = THUMBNAIL_MAX;
+
+			$thumb_outside = $image->resize(THUMBNAIL_MAX, THUMBNAIL_MAX, "outside")->crop("50%-".(THUMBNAIL_MAX/2),"50%-".(THUMBNAIL_MAX/2),THUMBNAIL_MAX,THUMBNAIL_MAX);
+			$thumb_inside = $image->resize($thumb_w, $thumb_h, "inside");
+
+			$thumb_w_offset = (THUMBNAIL_MAX/2)-($thumb_w/2);
+			$thumb_h_offset = (THUMBNAIL_MAX/2)-($thumb_h/2);
+
+			$thumb_bkg = $clear_img->resize(THUMBNAIL_MAX,THUMBNAIL_MAX, "outside");
+			$thumb_bkg->merge( $thumb_outside, 0, 0)->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_thumb_o.jpg");
+			$thumb_bkg->merge( $thumb_inside, $thumb_w_offset, $thumb_h_offset)->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_thumb_i.jpg");
+
+			// Generate full size images
+			$fs_bkg = $image->resize(FULLSIZE_MAX,FULLSIZE_MAX, "outside")->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_full.jpg",12);;
+
+			$fs_ratio = FULLSIZE_MAX/$orig_hyp;
+			$fs_h = round($orig_h * $fs_ratio);
+			$fs_w = round($orig_w * $fs_ratio);
+			$fs_hyp = FULLSIZE_MAX;
+
+			if( ADD_WATERMARK ){
+				$fs_inside = $image->resize($fs_w, $fs_h)->merge($watermark, '0', '100%-300');
 			} else {
-				// Landscape image
-				$h_offset = 50+25-($thumb_h/2);
-				$w_offset = 0;
+				$fs_inside = $image->resize($fs_w, $fs_h);
 			}
 
-			$thumb_bkg = WideImage::load(SYS_MEDIA_PATH . "images/thumbnail-frame-bkg-50.png");
-			$thumb_bkg
-				->merge( $thumb, 0, 0)
-				->merge( $thumb_hover, $w_offset,$h_offset )
-				->merge( $thumb_100, 50, 0 )
-				->merge(WideImage::load(SYS_MEDIA_PATH . "images/thumbnail-frame-sprite-50.png"),0,0)
-				->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_small.jpg');
+			$fs_w_offset = (FULLSIZE_MAX/2)-($fs_w/2);
+			$fs_h_offset = (FULLSIZE_MAX/2)-($fs_h/2);
 
-			$image->resize(500, 500)->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_500.jpg');
-			$image->resize(1000, 1000)->saveToFile(IMAGE_PATH . 'image'.$insert_id.'_orig.jpg');
-			$image->resize(700,700)->merge($watermark, '0', '100%-250')->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_700.jpg");
+//			$fs_bkg = $clear_img->resize(FULLSIZE_MAX,FULLSIZE_MAX, "outside");
+//			$fs_bkg->merge( $fs_inside, $fs_w_offset, $fs_h_offset)->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_full_s.jpg");
+			$fs_inside->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_full_s.jpg");
 
+			if( ADD_WATERMARK ){
+				$full_size = $image->resize(FULLSIZE_MAX,FULLSIZE_MAX)->merge($watermark, '0', '100%-300');
+			} else {
+				$full_size = $image->resize(FULLSIZE_MAX,FULLSIZE_MAX);
+			}
+			$full_size->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_full.jpg");
+
+			$time = "?".time();
+			die(
+				"<style>html,body{background:#EEE}</style>".
+				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_full.jpg{$time}'>".
+				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_full_s.jpg{$time}'>".
+				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_thumb_i.jpg{$time}'>".
+				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_thumb_o.jpg{$time}'>"
+			);
 			$this->return_data(
 				"success",
-				"Item $insert_id successfully added",
+				"Item {$inserted_item["id"]} successfully added",
 				array(
 					"added_item" => $insert_id
 				)
@@ -444,9 +478,11 @@ class Router{
 		$p = Portfolio::get_instance();
 
 		if( $deleted_item = $p->item_delete($id) ){
-			@unlink(IMAGE_PATH . 'image'.$id.'_small.jpg');
-			@unlink(IMAGE_PATH . 'image'.$id.'_500.jpg');
-			@unlink(IMAGE_PATH . 'image'.$id.'_orig.jpg');
+			@unlink(IMAGE_PATH . "image{$id}_full.jpg");
+			@unlink(IMAGE_PATH . "image{$id}_full_s.jpg");
+			@unlink(IMAGE_PATH . "image{$id}_thumb_i.jpg");
+			@unlink(IMAGE_PATH . "image{$id}_thumb_o.jpg");
+			@unlink(IMAGE_PATH . "image{$id}_orig.jpg");
 
 			$this->return_data(
 				"success",
