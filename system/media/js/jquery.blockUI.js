@@ -1,23 +1,9 @@
 ﻿/*!
  * jQuery blockUI plugin
- * Version 2.31 (06-JAN-2010)
- * @requires jQuery v1.2.3 or later
- *
- * Examples at: http://malsup.com/jquery/block/
- * Copyright (c) 2007-2008 M. Alsup
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- * Thanks to Amir-Hossein Sobhi for some excellent contributions!
+ * Trimmed down by Michael Meyer
  */
 
 ;(function($) {
-
-if (/1\.(0|1|2)\.(0|1|2)/.test($.fn.jquery) || /^1.1/.test($.fn.jquery)) {
-	alert('blockUI requires jQuery v1.2.3 or later!  You are using v' + $.fn.jquery);
-	return;
-}
 
 $.fn._fadeIn = $.fn.fadeIn;
 
@@ -32,20 +18,6 @@ var ie6 = $.browser.msie && /MSIE 6.0/.test(navigator.userAgent) && !mode;
 // global $ methods for blocking/unblocking the entire page
 $.blockUI   = function(opts) { install(window, opts); };
 $.unblockUI = function(opts) { remove(window, opts); };
-
-// convenience method for quick growl-like notifications  (http://www.google.com/search?q=growl)
-$.growlUI = function(title, message, timeout, onClose) {
-	var $m = $('<div class="growlUI"></div>');
-	if (title) $m.append('<h1>'+title+'</h1>');
-	if (message) $m.append('<h2>'+message+'</h2>');
-	if (timeout == undefined) timeout = 3000;
-	$.blockUI({
-		message: $m, fadeIn: 700, fadeOut: 1000, centerY: false,
-		timeout: timeout, showOverlay: false,
-		onUnblock: onClose, 
-		css: $.blockUI.defaults.growlCSS
-	});
-};
 
 // plugin method for blocking element content
 $.fn.block = function(opts) {
@@ -65,12 +37,12 @@ $.fn.unblock = function(opts) {
 	});
 };
 
-$.blockUI.version = 2.31; // 2nd generation blocking at no extra cost!
+$.blockUI.version = 2.32; // 2nd generation blocking at no extra cost!
 
 // override these in your code to change the default behavior and style
 $.blockUI.defaults = {
 	// message displayed when blocking (use null for no message)
-	message:  '<h1>Please wait...</h1>',
+	message:  null,
 
 	title: null,	  // title string; only used when theme == true
 	draggable: true,  // only used when theme == true (requires jquery-ui.js to be loaded)
@@ -80,7 +52,9 @@ $.blockUI.defaults = {
 	// styles for the message when blocking; if you wish to disable
 	// these and use an external stylesheet then do this in your code:
 	// $.blockUI.defaults.css = {};
-	css: {
+	css: {},
+	themedCSS: {},
+/*	css: {
 		padding:	0,
 		margin:		0,
 		width:		'30%',
@@ -92,35 +66,19 @@ $.blockUI.defaults = {
 		backgroundColor:'#fff',
 		cursor:		'wait'
 	},
-	
+
 	// minimal style set used when themes are used
 	themedCSS: {
 		width:	'30%',
 		top:	'40%',
 		left:	'35%'
-	},
+	},*/
 
 	// styles for the overlay
 	overlayCSS:  {
-		backgroundColor: '#000',
-		opacity:	  	 0.6,
-		cursor:		  	 'wait'
-	},
-
-	// styles applied when using $.growlUI
-	growlCSS: {
-		width:  	'350px',
-		top:		'10px',
-		left:   	'',
-		right:  	'10px',
-		border: 	'none',
-		padding:	'5px',
-		opacity:	0.6,
-		cursor: 	'default',
-		color:		'#fff',
-		backgroundColor: '#000',
-		'-webkit-border-radius': '10px',
-		'-moz-border-radius':	 '10px'
+		backgroundColor: '#111',
+		opacity:	  	 0.9
+//		cursor:		  	 'wait'
 	},
 	
 	// IE issues: 'about:blank' fails on HTTPS and javascript:false is s-l-o-w
@@ -134,8 +92,8 @@ $.blockUI.defaults = {
 	baseZ: 1000,
 
 	// set these to true to have the message automatically centered
-	centerX: true, // <-- only effects element blocking (page block controlled via css above)
-	centerY: true,
+	centerX: false, // <-- only effects element blocking (page block controlled via css above)
+	centerY: false,
 
 	// allow body element to be stetched in ie6; this makes blocking look better
 	// on "short" pages.  disable if you wish to prevent changes to the body height

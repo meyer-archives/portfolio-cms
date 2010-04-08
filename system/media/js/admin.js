@@ -90,9 +90,8 @@ $(document).ready(function() {
 
 					$("#ab-item-list h1").html(e.data.project.title);
 					if( e.data.items.length > 0 ){
-					
 					} else {
-						$("#ab-item-list ul").html("<li class='ab-list-item empty'>Project "+pid+" ("+e.data.project.title+") is empty</li>");
+						$("#ab-item-list ul").html("<li class='ab-list-item empty'>"+e.data.project.title+" ("+pid+") is empty</li>");
 					}
 
 					$$.ab.animate({left:-250},150);
@@ -115,6 +114,6 @@ $(document).ready(function() {
 	});
 
 	$("#wrapper").block({
-		"message": "<h1>Reload Frame</h1>"
+		"message": "<a href='#'>Reload Frame</a>"
 	});
 });

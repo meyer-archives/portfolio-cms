@@ -358,15 +358,12 @@ class Router{
 			if( !empty($_POST["item_project"] ) )
 				$project = escape( $_POST["item_project"] );
 
-/*			$inserted_item = $p->item_add(
+			$inserted_item = $p->item_add(
 				$title,
 				$desc,
 				$project
 			);
-*/
-			$inserted_item = array(
-				"id"=>815
-			);
+
 
 			$original = $image->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_orig.jpg");
 			$clear_img = WideImage::load(SYS_MEDIA_PATH . "images/clear.png");
@@ -420,14 +417,6 @@ class Router{
 			}
 			$full_size->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_full.jpg");
 
-			$time = "?".time();
-			die(
-				"<style>html,body{background:#EEE}</style>".
-				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_full.jpg{$time}'>".
-				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_full_s.jpg{$time}'>".
-				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_thumb_i.jpg{$time}'>".
-				"<img style='padding:5px 5px 0 0' src='".IMAGE_URL."image{$inserted_item["id"]}_thumb_o.jpg{$time}'>"
-			);
 			$this->return_data(
 				"success",
 				"Item {$inserted_item["id"]} successfully added",

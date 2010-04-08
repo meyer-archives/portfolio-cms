@@ -25,14 +25,12 @@ class Template {
 		if( file_exists( TEMPLATE_PATH . $name . "." . self::$format ) ){
 			self::$template_name = $name;
 			self::set( "body_id", $name."-page");
-			self::set( "page_title", false );
 		} else {
 			self::$template_name = "error";
 			self::set( "status_code", 404 );
 			self::set( "body_id", "error-page" );
 			self::set( "error_message", "Page not found" );
 			self::set( "error_details", "The page you are looking for could not be found." );
-			self::set( "page_title", "Page not found" );
 			self::render();
 		}
 	}
@@ -51,6 +49,19 @@ class Template {
 		}
 
 		$template = $twig->loadTemplate( self::$template_name . "." . self::$format );
+		switch( self::$format ){
+			case "html":
+				header("Content-type: text/html");
+			break;
+
+			case "json":
+				header("Content-type: application/javascript");
+			break;
+
+			case "xml":
+				header("Content-type: text/xml");
+			break;
+		}
 		echo $template->render( self::$data );
 
 		exit();

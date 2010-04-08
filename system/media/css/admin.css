@@ -375,3 +375,49 @@ div.ab-list-footer a.ab-button{
 	left: 0;
 	background-image: url(../images-new/shadow-bkg.png);
 }
+
+@-webkit-keyframes refreshRotate {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	
+	50% {
+		-webkit-transform: rotate(-180deg);
+	}
+	100% {
+		-webkit-transform: rotate(-360deg);
+	}
+}
+
+#wrapper div.blockUI.blockOverlay {
+	
+}
+
+#wrapper div.blockUI.blockMsg.blockElement {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 10px;
+	height: 10px;
+}
+
+#wrapper div.blockUI.blockMsg.blockElement a{
+	-webkit-animation-name: refreshRotate;
+	-webkit-animation-duration: 40s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-transition: opacity .2s linear;
+	background: url(../images/refresh-bezel.png) no-repeat center center;
+	position: absolute;
+	top: -150px;
+	left: -150px;
+	width: 300px;
+	height: 300px;
+	text-indent: -1000px;
+	overflow: hidden;
+	opacity: .4;
+}
+
+#wrapper div.blockUI.blockMsg.blockElement a:hover{
+	opacity: 1;
+}

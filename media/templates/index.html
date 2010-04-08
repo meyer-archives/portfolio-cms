@@ -9,12 +9,12 @@
 <div class="gallery-preview">
 	<ul id="thumbs">
 		{% for item in items_by_id %}
-			<li><img src="{{ item }}"></li>
+			<li><a href="{{ projects_by_id[item.project].url }}"><img src="{{ item.thumb }}"></a></li>
 		{% else %}
 			<li>No images</li>
 		{% endfor %}
 	</ul>
-	<p class="preview-link"><a href="/gallery/">View the gallery</a>&nbsp;&rsaquo;</small>
+	<p class="preview-link"><a href="/gallery/">View the gallery</a>&nbsp;&rsaquo;</p>
 </div>
 
 {% endblock %}
