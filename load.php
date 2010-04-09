@@ -8,9 +8,8 @@ if( get_magic_quotes_gpc() )
 define( "SITE_PATH", dirname(__FILE__) . "/" );
 define( "SITE_URL", "/" );
 define( "API_URL", SITE_URL . "api/" );
-define( "PROJECT_PREFIX", "gallery/" );
 
-define( "STORAGE_URL", "/storage/" );
+define( "STORAGE_URL", SITE_URL . "storage/" );
 define( "STORAGE_PATH", SITE_PATH . "storage/" );
 
 define( "IMAGE_PATH", STORAGE_PATH . "images/" );
@@ -18,14 +17,15 @@ define( "IMAGE_URL", STORAGE_URL . "images/" );
 
 define( "SYS_PATH", SITE_PATH . "system/" );
 
-define( "MEDIA_URL", "/user/" );
-define( "MEDIA_PATH", SITE_PATH . "user/" );
-define( "TEMPLATE_PATH", MEDIA_PATH . "templates/" );
-
-define( "SYS_MEDIA_URL", "/system/media/" );
+// System
+define( "SYS_MEDIA_URL", SITE_URL . "system/media/" );
 define( "SYS_MEDIA_PATH", SITE_PATH . "system/media/" );
-
 define( "INCLUDES_PATH", SYS_PATH . "classes/" );
+
+// User-defined stuff
+define( "MEDIA_URL", "/user/media/" );
+define( "MEDIA_PATH", SITE_PATH . "user/media/" );
+define( "TEMPLATE_PATH", SITE_PATH . "user/templates/" );
 
 // Load third-party classes and functions
 include_once( INCLUDES_PATH . "typogrify/smartypants.php" );

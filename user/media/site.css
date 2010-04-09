@@ -1,8 +1,6 @@
-/* @override http://cooper.local:7777/media/css/site.css */
-
-/* @override http://cooper.local:7777/media/css/site.css */
-
-/* @override http://cooper.local:7777/media/css/site.css */
+/* @override 
+	http://cooper.local:7777/user/media/site.css
+*/
 
 /* @group YUI Reset CSS */
 
@@ -18,7 +16,7 @@ body{
 
 html,body{
 	height: 100%;
-	background: #000 url(../images/background.jpg) no-repeat left top;
+	background: #000 url(background.jpg) no-repeat left top;
 }
 
 a {
@@ -38,7 +36,7 @@ a {
 	width: 526px;
 	height: 128px;
 	display: block;
-	background: url(../images/header-text.jpg) no-repeat;
+	background: url(header-text.jpg) no-repeat;
 	top: 36px;
 	left: 37px;
 	text-indent: -2180px;
@@ -54,12 +52,20 @@ h2{
 p{
 	line-height: 1.5em;
 	font-size: 16px;
-	margin-bottom: 14px;
 	letter-spacing: 0;
 }
+
+body#page-about #content p{
+	font-size: 16px;
+	line-height: 23px;
+	margin-bottom: 17px;
+}
+
 #content{
 	margin: 25px 0 25px 50px;
 	position: relative;
+	overflow: hidden;
+	padding-bottom: 40px;
 }
 
 
@@ -127,6 +133,8 @@ p.quote{
 	font-style: italic;
 	line-height: 38px;
 	font-size: 36px;
+	padding-bottom: 30px;
+	margin: 0;
 }
 
 p.preview-link{
@@ -139,7 +147,7 @@ p.preview-link{
 
 div.statement-preview p.preview-link{
 	position: absolute;
-	bottom: -35px;
+	bottom: 0;
 	right: 0;
 }
 
@@ -151,31 +159,32 @@ div.statement-preview{
 
 div.gallery-preview p.preview-link{
 	position: absolute;
-	bottom: -35px;
+	bottom: 0;
 	left: 0px;
 }
 
 div.statement-preview{
 	width: 300px;
+	float: left;
+	margin-right: 20px;
 }
 
 div.gallery-preview{
 	width: 630px;
-	position: absolute;
-	top: 0;
-	left: 320px;
+	float: left;
+	padding-bottom: 30px;
 }
 
-body.about .primary{
+body#page-about .primary{
 	width: 740px;
 	float:left;
 	margin-right:10px;
 }
 
-body.about .secondary{
-	width: 200px;
-	float: left;
-	margin-top: 50px;
+body#page-about .primary img{
+	float: right;
+	margin-left: 20px;
+	margin-bottom: 10px;
 }
 
 #content a{
@@ -187,4 +196,8 @@ body.about .secondary{
 	text-decoration: none;
 	border-bottom-style: dotted;
 	border-bottom-width: 1px;
+}
+
+ul#thumbs{
+	overflow: hidden;
 }

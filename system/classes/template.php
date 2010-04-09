@@ -24,7 +24,7 @@ class Template {
 
 		if( file_exists( TEMPLATE_PATH . $name . "." . self::$format ) ){
 			self::$template_name = $name;
-			self::set( "body_id", $name."-page");
+			self::set( "body_id", $name);
 		} else {
 			self::$template_name = "error";
 			if( self::$format != "html" && self::$format != "json" )

@@ -8,7 +8,7 @@
 </div>
 <div class="gallery-preview">
 	<ul id="thumbs">
-		{% for item in items_by_id|reverse %}
+		{% for item in items_by_id|reverse|slice(0,7) %}
 			<li><a href="{{ projects_by_id[item.project].url }}"><img src="{{ item.thumb }}"></a></li>
 		{% else %}
 			<li>No images</li>

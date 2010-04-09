@@ -22,11 +22,22 @@ class Twig_Extras extends Twig_Extension{
 	public function getName(){
 		return 'extras';
 	}
+
+	public function getFilters(){
+		return array(
+			'slice' => new Twig_Filter_Function('twig_slice_filter'),
+		);
+	}
+
 	public function getTokenParsers(){
 		return array(
 			new Nav_TokenParser()
 		);
 	}
+}
+
+function twig_slice_filter($array, $offset, $length){
+	return array_slice( $array, $offset, $length, true );
 }
 
 class Nav_TokenParser extends Twig_TokenParser{
