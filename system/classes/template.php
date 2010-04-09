@@ -27,6 +27,8 @@ class Template {
 			self::set( "body_id", $name."-page");
 		} else {
 			self::$template_name = "error";
+			if( self::$format != "html" && self::$format != "json" )
+				self::$format = "html";
 			self::set( "status_code", 404 );
 			self::set( "body_id", "error-page" );
 			self::set( "error_message", "Page not found" );

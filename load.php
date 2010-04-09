@@ -18,8 +18,8 @@ define( "IMAGE_URL", STORAGE_URL . "images/" );
 
 define( "SYS_PATH", SITE_PATH . "system/" );
 
-define( "MEDIA_URL", "/media/" );
-define( "MEDIA_PATH", SITE_PATH . "media/" );
+define( "MEDIA_URL", "/user/" );
+define( "MEDIA_PATH", SITE_PATH . "user/" );
 define( "TEMPLATE_PATH", MEDIA_PATH . "templates/" );
 
 define( "SYS_MEDIA_URL", "/system/media/" );
@@ -54,8 +54,8 @@ $twig = new Twig_Environment( $loader , array(
 	'base_template_class' => 'Template_Extras'
 ));
 
-// Twig Tags
-include_once( SYS_PATH . "tags.php" );
+// Twig Extras
+include_once( SYS_PATH . "twig-extras.php" );
 
 $twig->addExtension(new Twig_Extras());
 
