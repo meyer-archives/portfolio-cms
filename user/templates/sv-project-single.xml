@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simpleviewergallery
+	title=""
+	textColor="FFFFFF"
+	frameColor="FFFFFF"
+	thumbPosition="LEFT"
+	galleryStyle="MODERN"
+	thumbColumns="6"
+	thumbRows="5"
+	showOpenButton="TRUE"
+	showFullscreenButton="TRUE"
+	frameWidth="5"
+	maxImageWidth="600"
+	maxImageHeight="500"
+	imagePath=""
+	thumbPath=""
+	useFlickr="false"
+	flickrUserName=""
+	flickrTags=""
+	languageCode="AUTO"
+	languageList=""	
+	navPosition="right"
+	vAlign="center"
+	hAlign="center"
+>
+
+{% for item in items_by_project[current_project.id] %}
+		<image imageURL="{{ item.src }}" thumbURL="{{ item.thumb }}" linkURL="" linkTarget="" >
+			<caption><![CDATA[{{ item.title }}]]></caption>
+		</image>
+{% endfor %}
+
+</simpleviewergallery>

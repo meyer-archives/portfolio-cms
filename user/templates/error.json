@@ -1,1 +1,1 @@
-Error!
+{{ error_message }} - {{ error_details }}

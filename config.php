@@ -1,5 +1,8 @@
 <?php
 
+// Site URL, trailing slash required
+define( "SITE_URL", "http://cooper.local:7777/" );
+
 // Username and password // TODO: Should come out of the DB
 define( "USERNAME", "cassia" );
 define( "USERPASS", "44oranges" );

@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<simpleviewergallery
-	maxImageWidth="600"
-	maxImageHeight="500"
-	textColor="0xFFFFFF"
-	frameColor="0xFFFFFF"
-	frameWidth="5"
-	stagePadding="40"
-	navPadding="40"
-	thumbnailColumns="6"
-	thumbnailRows="5"
-	navPosition="right"
-	vAlign="center"
-	hAlign="center"
-	title=""
-	enableRightClickOpen="true"
-	backgroundImagePath=""
-	imagePath=""
-	thumbPath="">
-	<image>
-		<filename>01.jpg</filename>
-		<caption></caption>	
-	</image>
-</simpleviewergallery>
+<gallery
+	frameColor="0x000000"
+	frameWidth="1"
+	imagePadding="15"
+	displayTime="0"
+	enableRightClickOpen="false"
+	leftAlignImages="true"
+	unselectedBrightness="-200"
+	enablePlayButton="false"
+>
+{% for item in items_by_project[current_project.id] %}
+<image>
+   <url>{{ item.src }}</url>
+   <caption>{#<![CDATA[{{ item.title }}]]>#}</caption>
+   <width>300</width>
+   <height>400</height>
+</image>
+{% endfor %}
+</gallery>

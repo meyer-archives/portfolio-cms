@@ -59,6 +59,11 @@ class Router{
 			// Project Short URL
 			'project_short_url'=>'#^go\/(?P<project_id>\d+)$#i',
 
+			// Twitter OAUTH stuff
+			'twitter_admin'=>'#^twitter/admin$#i',
+			'twitter_login'=>'#^twitter/login$#i',
+			'twitter_redirect'=>'#^twitter/redirect$#i',
+
 			// API
 			// Items
 			'item_list'=>'#^api/items$#i',
@@ -97,6 +102,27 @@ class Router{
 			}
 		}
 
+	}
+
+	private function twitter_admin(){
+		if(
+			empty($_SESSION['access_token']) ||
+			empty($_SESSION['access_token']['oauth_token']) ||
+			empty($_SESSION['access_token']['oauth_token_secret'])
+		) {
+			header( "Location: " . SITE_URL . "twitter/login" );
+		}
+		$access_token = $_SESSION['access_token'];
+		die( "ADMIN" );
+	}
+
+	private function twitter_login(){
+		echo "LOGIN";
+		exit;
+	}
+
+	private function twitter_redirect(){
+		die( "REDIRECT" );
 	}
 
 	public function route(){
@@ -155,11 +181,11 @@ class Router{
 		$p = Portfolio::get_instance();
 
 		if( $current_project = $p->project_by_slug( $args["project_slug"] ) ) {
-			$t = new Template("project-single");
+			$t = new UserTemplate("project-single");
 			$t->set("current_project",$current_project);
 			$t->render();
 		} else {
-			$t = new Template("error");
+			$t = new UserTemplate("error");
 			$t->set( "page_title", "Project Not Found" );
 			$t->set( "error_message", "Project not found" );
 			$t->set( "error_details", "The project you were looking for could not be found" );
@@ -170,9 +196,9 @@ class Router{
 	private function catchall_route( $args ){
 		$p = Portfolio::get_instance();
 		if( empty( $args["url_string"] ) ){
-			$t = new Template("index");
+			$t = new UserTemplate("index");
 		} else {
-			$t = new Template("page-".$args["url_string"]);
+			$t = new UserTemplate("page-".$args["url_string"]);
 		}
 		$t->render();
 	}

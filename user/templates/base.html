@@ -8,6 +8,8 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}site.css" media="all">
 	<script type="text/javascript" src="{{ MEDIA_URL }}site.js"></script>
+	{% block head %}
+	{% endblock %}
 </head>
 <body id="{{ body_id }}" class="{% if logged_in %}logged-in{% else %}logged-out{% endif %}">
 

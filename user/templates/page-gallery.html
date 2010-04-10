@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block body %}
-
-
-
+<ul>
+{% for project in projects_by_id %}
+	<li><a href="{{ project.url }}">{{ project.title }} ({{ project.item_count }})</a></li>
+{% endfor %}
+</ul>
 {% endblock %}

@@ -1,5 +1,24 @@
 {% extends 'base.html' %}
 {% block page_title %}{{ current_project.title }}{% endblock %}
+{% block head %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}swfobject.js"></script>
+{% endblock %}
 {% block body %}
-<h1>Project {{ current_project.id }} &mdash; {{ current_project.title }}</h1>
+<h1>{{ current_project.title }}</h1>
+<div id="av-gallery">SimpleViewer requires JavaScript and the Flash Player. <a href="http://www.macromedia.com/go/getflashplayer/">Get Flash.</a></div>	
+<script type="text/javascript">
+
+var flashvars = {};
+flashvars.xmlURL = "{{ current_project.url }}.xml";
+var params = {
+	"wmode": "transparent"
+};
+//params.allowfullscreen = true;
+params.allowscriptaccess = "always";
+//params.bgcolor = "222222";
+
+swfobject.embedSWF("{{ MEDIA_URL }}autoviewer.swf", "av-gallery", "100%", "500", "9.0.124", false, flashvars, params);
+
+</script>
+
 {% endblock %}

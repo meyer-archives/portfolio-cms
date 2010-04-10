@@ -62,7 +62,7 @@ body#page-about #content p{
 }
 
 #content{
-	margin: 25px 0 25px 50px;
+	margin: 0;
 	position: relative;
 	overflow: hidden;
 	padding-bottom: 40px;
@@ -75,7 +75,7 @@ ul#menu{
 	padding-left: 50px;
 	background: #000;
 	background: rgba(0,0,0,0.7);
-	width: 960px;
+	margin-bottom: 10px;
 }
 
 ul#menu li{

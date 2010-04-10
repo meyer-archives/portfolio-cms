@@ -6,6 +6,7 @@ class Template {
 	private static $template_name;
 	private static $format;
 	private static $twig;
+	public static $template_path;
 
 	public function __construct( $name = false ){
 		$p = Portfolio::get_instance();
@@ -35,6 +36,17 @@ class Template {
 			self::set( "error_details", "The page you are looking for could not be found." );
 			self::render();
 		}
+	}
+
+	public function twig_init( $path ){
+		Twig_Autoloader::register();
+		$loader = new Twig_Loader_Filesystem($path);
+		$twig = new Twig_Environment( $loader , array(
+			'cache' => false,//STORAGE_PATH . "cache/",
+			'debug' => true,
+			'auto_reload' => true,
+			'base_template_class' => 'Template_Extras'
+		));
 	}
 
 	public static function set($k, $v){
@@ -70,5 +82,18 @@ class Template {
 	}
 }
 
+class UserTemplate extends Template {
+	function __construct( $name = false ){
+		self::twig_init(TEMPLATE_PATH);
+		parent::__construct($name);
+	}
+}
+
+class SystemTemplate extends Template {
+	function __construct( $name = false ){
+		self::twig_init(SYS_TEMPLATE_PATH);
+		parent::__construct($name);
+	}
+}
 
 ?>
