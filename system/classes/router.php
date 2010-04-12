@@ -181,11 +181,11 @@ class Router{
 		$p = Portfolio::get_instance();
 
 		if( $current_project = $p->project_by_slug( $args["project_slug"] ) ) {
-			$t = new UserTemplate("project-single");
+			$t = new Template("project-single");
 			$t->set("current_project",$current_project);
 			$t->render();
 		} else {
-			$t = new UserTemplate("error");
+			$t = new Template("error");
 			$t->set( "page_title", "Project Not Found" );
 			$t->set( "error_message", "Project not found" );
 			$t->set( "error_details", "The project you were looking for could not be found" );
@@ -196,9 +196,9 @@ class Router{
 	private function catchall_route( $args ){
 		$p = Portfolio::get_instance();
 		if( empty( $args["url_string"] ) ){
-			$t = new UserTemplate("index");
+			$t = new Template("index");
 		} else {
-			$t = new UserTemplate("page-".$args["url_string"]);
+			$t = new Template("page-".$args["url_string"]);
 		}
 		$t->render();
 	}
@@ -260,7 +260,7 @@ class Router{
 				"error",
 				'$_GET["project_id"] must be set for items_by_project()'
 			);
-		$pid = $_GET["project_id"];
+		$pid = (int) $_GET["project_id"];
 
 		$p = Portfolio::get_instance();
 		$project = $p->project_by_id($pid);
@@ -294,7 +294,7 @@ class Router{
 					"All items from project {$pid} successfully fetched",
 					array(
 						"project"=>$current_project,
-						"items"=>$p->items_by_project($current_project["id"])
+						"items"=>(object)$p->items_by_project($current_project["id"])
 					)
 				);
 			} else {
@@ -393,7 +393,7 @@ class Router{
 
 			$original = $image->saveToFile(IMAGE_PATH . "image{$inserted_item["id"]}_orig.jpg");
 			$clear_img = WideImage::load(SYS_MEDIA_PATH . "images/clear.png");
-			if( ADD_WATERMARK ) $watermark = WideImage::load(MEDIA_PATH . "images/" . WATERMARK_IMG);
+			if( ADD_WATERMARK ) $watermark = WideImage::load(MEDIA_PATH . WATERMARK_IMG);
 
 			$orig_h = $image->getHeight();
 			$orig_w = $image->getWidth();

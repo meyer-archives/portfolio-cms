@@ -1,49 +1,61 @@
 <div id="admin-bar">
-	<div id="ab-shadow"></div>
-	<div id="ab-container">
-		<div id="ab-project-list" class="ab-list">
-			<div class="ab-list-header">
+	<div id="shadow"></div>
+	<div id="container">
+		<div id="project-list" class="list">
+			<div class="list-header">
 				<h1>Projects</h1>
-				<a href="#" title="Add new project" id="ab-add-project" class="ab-add-button"><span>Add project</span></a>
+				<a href="#" title="Add new project" id="add-project" class="add-button"><span>Add project</span></a>
 			</div>
-			<div class="ab-list-container">
-				<ul class="ab-listview">
+			<div class="list-container">
+				<ul class="listview">
 {% for project in projects_by_id %}
-					<li class='project ab-list-item' data-pid='{{ project.id }}'>
+					<li class='project list-item' data-pid='{{ project.id }}'>
 						<h2>{{ project.title }}</h2>
 						<ul class='options'>
-							<li class='ab-li-item view-project'><a href='#'>View project {{ project.id }}</a></li>
-							<li class='ab-li-item edit-project'><a href='#'>Edit project {{ project.id }}</a></li>
-							<li class='ab-li-item delete-project'><a href='{{ project.url }}'>Delete project {{ project.id }}</a></li>
-							<li class='ab-li-item sort-handle'><span>Reorder</span></li>
+							<li class='li-item view-project'><a href='#'>View project {{ project.id }}</a></li>
+							<li class='li-item edit-project'><a href='#'>Edit project {{ project.id }}</a></li>
+							<li class='li-item delete-project'><a href='{{ project.url }}'>Delete project {{ project.id }}</a></li>
+							<li class='li-item sort-handle'><span>Reorder</span></li>
 						</ul>
 					</li>
-{% endfor %}
+{% endfor %}-->
 				</ul>
-				<div class="ab-listview-end-cap">
+				<div class="listview-end-cap">
 				</div>
 			</div>
-			<div class="ab-list-footer">
+			<div class="list-footer">
 			</div>
 		</div>
-		<div id="ab-item-list" class="ab-list">
-			<div class="ab-list-header">
+		<div id="item-list" class="list">
+			<div class="list-header">
 				<h1>Project Title</h1>
-				<a href="#" title="Add new project" id="ab-show-project-list" class="ab-add-button"><span>Add item</span></a>
+				<a href="#" title="Add new item" id="show-project-list" class="add-button"><span>Add item</span></a>
+				<div class="item-add">
+					<form enctype="multipart/form-data" action="{{ API_URL }}item/add/" method="POST">
+						<h4>Add a new item to this project</h4>
+						<select name="item_project" style="width:120px">
+							{% for project in projects_by_id %}
+							<option value="{{ project.id }}">{{ project.title }} {{ project.item_count }} ({{ project.id }})</option>
+							{% endfor %}
+						</select>
+						<input name="image_original" type="file" />
+						<p><button type="submit">Upload</button> <a class="cancel" href="#">Cancel</a></p>
+					</form>
+				</div>
 			</div>
-			<div class="ab-list-container">
-				<ul class="ab-listview">
-					<li class="ab-list-item">Item 1</li>
-					<li class="ab-list-item">Item 2</li>
-					<li class="ab-list-item">Item 3</li>
-					<li class="ab-list-item">Item 4</li>
-					<li class="ab-list-item">Item 5</li>
-					<li class="ab-list-item">Item 6</li>
-					<li class="ab-list-item">Item 7</li>
+			<div class="list-container">
+				<ul class="listview">
+					<li class="list-item">Item 1</li>
+					<li class="list-item">Item 2</li>
+					<li class="list-item">Item 3</li>
+					<li class="list-item">Item 4</li>
+					<li class="list-item">Item 5</li>
+					<li class="list-item">Item 6</li>
+					<li class="list-item">Item 7</li>
 				</ul>
-				<div class="ab-listview-end-cap"></div>
+				<div class="listview-end-cap"></div>
 			</div>
-			<div class="ab-list-footer">
+			<div class="list-footer">
 			</div>
 		</div>
 	</div>

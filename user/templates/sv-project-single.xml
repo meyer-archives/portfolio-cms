@@ -25,7 +25,7 @@
 >
 
 {% for item in items_by_project[current_project.id] %}
-		<image imageURL="{{ item.src }}" thumbURL="{{ item.thumb }}" linkURL="" linkTarget="" >
+		<image imageURL="{{ item.image }}" thumbURL="{{ item.thumb }}" linkURL="" linkTarget="" >
 			<caption><![CDATA[{{ item.title }}]]></caption>
 		</image>
 {% endfor %}

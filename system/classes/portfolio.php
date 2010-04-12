@@ -73,8 +73,8 @@ class Portfolio {
 					"order" => $row["item_order"],
 					"date_added" => strtotime($row["date_added"]),
 					"last_updated" => strtotime($row["last_updated"]),
-					"orig" => IMAGE_URL . "image{$row["item_id"]}_orig.jpg",
-					"src" => IMAGE_URL . "image{$row["item_id"]}_full_s.jpg",
+//					"orig" => IMAGE_URL . "image{$row["item_id"]}_orig.jpg",
+					"image" => IMAGE_URL . "image{$row["item_id"]}_full_s.jpg",
 					"thumb" => IMAGE_URL . "image{$row["item_id"]}_thumb_o.jpg",
 					"thumb_i" => IMAGE_URL . "image{$row["item_id"]}_thumb_i.jpg",
 					"meta" => array()

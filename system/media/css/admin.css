@@ -1,3 +1,5 @@
+/* @override http://cooper.local:7777/system/media/css/admin.css */
+
 /* @override 
 	http://local.cassialeidigh.com/system/media/css/admin.css
 	http://local.cassialeidigh.com/system/media/css/admin.css
@@ -66,7 +68,7 @@ body,html{
 	padding: 0;
 }
 
-#admin-bar .ab-list{
+#admin-bar .list{
 	width: 250px;
 	position: absolute;
 	top: 0;
@@ -74,19 +76,19 @@ body,html{
 	height: 100%;
 }
 
-body.resizing div.ab-list-container {
+body.resizing div.list-container {
 	opacity: .5;
 }
 
-#admin-bar #ab-project-list{
+#admin-bar #project-list{
 	left: 0;
 }
 
-#admin-bar #ab-item-list{
+#admin-bar #item-list{
 	left: 250px;
 }
 
-#admin-bar ul.ab-listview li.ab-list-item{
+#admin-bar ul.listview li.list-item{
 	font-size: 12px;
 	color: #333;
 	height: 30px;
@@ -101,15 +103,6 @@ body.resizing div.ab-list-container {
 	background: url(../images-new/item-states.png) no-repeat 0 -30px;
 }
 
-#admin-bar *{
-	letter-spacing: 0;
-	word-spacing: 0;
-	text-align: left;
-	text-transform: none;
-	font-weight: normal;
-	font-style: normal;
-}
-
 #admin-bar h1,
 #admin-bar h2{
 	text-overflow: ellipsis;
@@ -121,11 +114,11 @@ body.resizing div.ab-list-container {
 	line-height: 30px;
 }
 
-#admin-bar ul.ab-listview li.ab-list-item:hover{
+#admin-bar ul.listview li.list-item:hover{
 	background: url(../images-new/item-states.png) no-repeat 0 -60px;
 }
 
-#admin-bar #ab-project-list ul.options{
+#admin-bar #project-list ul.options{
 	position: absolute;
 	top: 0;
 	right: 5px;
@@ -134,15 +127,15 @@ body.resizing div.ab-list-container {
 	padding-left: 4px;
 }
 
-#admin-bar #ab-project-list li:hover ul.options{
+#admin-bar #project-list li:hover ul.options{
 	display: block;
 }
 
-#admin-bar #ab-project-list li:hover h2{
+#admin-bar #project-list li:hover h2{
 	width: 160px;
 }
 
-#admin-bar #ab-project-list ul.options li{
+#admin-bar #project-list ul.options li{
 	height: 30px;
 	float: left;
 	width: 20px;
@@ -152,32 +145,32 @@ body.resizing div.ab-list-container {
 	margin-right: 5px;
 }
 
-#admin-bar #ab-project-list ul.options li.view-project a{
+#admin-bar #project-list ul.options li.view-project a{
 	background: url(../images/project-icons.gif) no-repeat 0 -30px;
 }
 
-#admin-bar #ab-project-list ul.options li.edit-project a{
+#admin-bar #project-list ul.options li.edit-project a{
 	background: url(../images/project-icons.gif) no-repeat -20px -30px;
 }
 
-#admin-bar #ab-project-list ul.options li.delete-project a{
+#admin-bar #project-list ul.options li.delete-project a{
 	background: url(../images/project-icons.gif) no-repeat -40px -30px;
 }
 
-#admin-bar #ab-project-list ul.options li.sort-handle span{
+#admin-bar #project-list ul.options li.sort-handle span{
 	background: url(../images/project-icons.gif) no-repeat -60px -30px;
 	cursor: ns-resize;
 }
 
-#admin-bar #ab-project-list ul.options li a,
-#admin-bar #ab-project-list ul.options li span{
+#admin-bar #project-list ul.options li a,
+#admin-bar #project-list ul.options li span{
 	display: block;
 	line-height: 30px;
 	height: 30px;
 }
 
-#admin-bar #ab-project-list ul.options li a:hover,
-#admin-bar #ab-project-list ul.options li span:hover{
+#admin-bar #project-list ul.options li a:hover,
+#admin-bar #project-list ul.options li span:hover{
 	background-position-y: 0px;
 }
 
@@ -204,7 +197,7 @@ button:active{
 	background: #CCC;
 }
 
-div#ab-container {
+div#container {
 	height: 100%;
 	width: 500px;
 	position: absolute;
@@ -212,13 +205,73 @@ div#ab-container {
 	left: 0;
 }
 
-#admin-bar .ab-list-header{
+#admin-bar .list-header{
 	height: 30px;
 	background: url(../images-new/item-states.png) no-repeat 0 0;
 	width: 250px;
+	position: relative;
 }
 
-.ab-list-header .ab-add-button{
+#admin-bar .list-header #add-project-menu{
+	position: absolute;
+	top: 27px;
+	right: 5px;
+	z-index: 10000;
+	font-size: 12px;
+	background: #FFF;
+	border: 1px solid rgba(0,0,0,0.37);
+	padding-top: 3px;
+	padding-bottom: 3px;
+	-webkit-border-radius: 4px
+}
+
+#focus{
+	position: absolute;
+	z-index: 100000;
+	top: 0;
+	right: 0;
+	width: 30px;
+	height: 30px;
+}
+
+#focus div{
+	width: 250px;
+	height: 250px;
+	position: absolute;
+	top: -110px;
+	left: -110px;
+	background: url(../images-new/focus-mask.png) no-repeat center center;
+}
+
+#admin-bar .list-header #add-project-menu ul{
+	background: #FFF;
+}
+
+#admin-bar .list-header #add-project-menu ul li a{
+	display: block;
+	height: 24px;
+	line-height: 24px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #3b3b3b;
+	text-decoration: none;
+	text-shadow: #fffeff 0 1px 0;
+}
+
+#admin-bar .list-header #add-project-menu ul li a:hover{
+	background: #EEE;
+}
+
+#admin-bar .list-header #add-project-menu .add-menu-header{
+	position: absolute;
+	top: -29px;
+	width: 32px;
+	height: 30px;
+	background: url(../images-new/menu-arrow.png) no-repeat center bottom;
+	right: -6px;
+}
+
+.list-header .add-button{
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -230,22 +283,22 @@ div#ab-container {
 	background: url(../images-new/add-new-sprite.png) -64px 0;
 }
 
-.ab-list-header .ab-add-button:hover{
+.list-header .add-button:hover{
 	background: url(../images-new/add-new-sprite.png) -32px 0;
 }
 
-.ab-list-header .ab-add-button:active{
+.list-header .add-button:active{
 	background: url(../images-new/add-new-sprite.png) 0 0;
 }
 
-#admin-bar .ab-list-header #ab-reorder-items,
-#admin-bar .ab-list-header #ab-reorder-projects{
+#admin-bar .list-header #reorder-items,
+#admin-bar .list-header #reorder-projects{
 	position: absolute;
 	top: 5px;
 	right: 10px;
 }
 
-a.ab-button{
+a.button{
 	height: 21px;
 	display: inline-block;
 	white-space: nowrap;
@@ -270,7 +323,7 @@ a.ab-button{
 	}
 }
 
-a.ab-button.save-items{
+a.button.save-items{
 	/*
 	-webkit-animation-name: pulse;
 	-webkit-animation-duration: 1.4s;
@@ -281,35 +334,35 @@ a.ab-button.save-items{
 	color: #4b7083;
 }
 
-a.ab-button.save-items:hover,
-a.ab-button.save-items:active{
+a.button.save-items:hover,
+a.button.save-items:active{
 	color: #676767;
 }
 
-a.ab-button.save-items span{
+a.button.save-items span{
 	background-position: left -84px;
 }
 
-a.ab-button span{
+a.button span{
 	display: block;
 	background: url(../images-new/button-sprite.png) no-repeat left 0;
 	padding-left: 7px;
 	height: 21px;
 }
 
-a.ab-button:hover{
+a.button:hover{
 	background-position: right -21px;
 }
 
-a.ab-button:hover span{
+a.button:hover span{
 	background-position: left -21px;
 }
 
-a.ab-button:active{
+a.button:active{
 	background-position: right -42px;
 }
 
-a.ab-button:active span{
+a.button:active span{
 	background-position: left -42px;
 }
 
@@ -337,21 +390,21 @@ a.ab-button:active span{
 	background: url(../images-new/item-states.png) no-repeat 0 -90px;
 }
 
-ul.ab-listview {
+ul.listview {
 	overflow: auto;
 }
 
-body.resizing ul.ab-listview{
+body.resizing ul.listview{
 	height: 100%;
 }
 
-div.ab-listview-end-cap{
+div.listview-end-cap{
 	background: url(../images-new/item-states.png) no-repeat 0 bottom;
 	height: 30px;
 	width: 250px;
 }
 
-div.ab-list-footer {
+div.list-footer {
 	height: 30px;
 	background: url(../images-new/item-states.png) no-repeat 0 -120px;
 	width: 250px;
@@ -360,13 +413,13 @@ div.ab-list-footer {
 	left: 0;
 }
 
-div.ab-list-footer a.ab-button{
+div.list-footer a.button{
 	position: absolute;
 	bottom: 2px;
 	right: 10px;
 }
 
-#ab-shadow{
+#shadow{
 	position: absolute;
 	top: 0;
 	width: 6px;

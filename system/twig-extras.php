@@ -26,18 +26,26 @@ class Twig_Extras extends Twig_Extension{
 	public function getFilters(){
 		return array(
 			'slice' => new Twig_Filter_Function('twig_slice_filter'),
+			'first' => new Twig_Filter_Function('twig_first_filter')
 		);
 	}
 
 	public function getTokenParsers(){
 		return array(
-			new Nav_TokenParser()
+			new Nav_TokenParser(),
+			new Now_TokenParser()
 		);
 	}
 }
 
 function twig_slice_filter($array, $offset, $length){
 	return array_slice( $array, $offset, $length, true );
+}
+
+function twig_first_filter($array){
+	if( sizeof( $array ) > 0 )
+		return array_slice($array);
+	return array();
 }
 
 class Nav_TokenParser extends Twig_TokenParser{
@@ -98,5 +106,41 @@ class Nav_Node extends Twig_Node{
 		;
 	}
 }
+
+
+class Now_TokenParser extends Twig_TokenParser{
+	public function parse(Twig_Token $token){
+		$lineno = $token->getLine();
+		$date_string = $this->parser->getStream()->expect(Twig_Token::STRING_TYPE)->getValue();
+		$this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+
+		return new Now_Node($date_string, $lineno);
+	}
+
+	public function getTag(){
+		return 'now';
+	}
+}
+
+class Now_Node extends Twig_Node{
+	protected $date_string;
+ 
+	public function __construct($date_string, $lineno){
+		parent::__construct($lineno);
+		$this->date_string = $date_string;
+	}
+ 
+	public function compile($compiler){
+		$compiler
+			->addDebugInfo($this)
+//			->write('echo "<li class=\"nav-link\"><a href=\"".SITE_URL."\">'.$this->slug.'</a></li>"')
+
+			->write('echo date("' . $this->date_string . '");')
+
+			->raw(";\n")
+		;
+	}
+}
+
 
 ?>

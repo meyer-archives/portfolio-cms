@@ -18,31 +18,23 @@
 		<h1>
 			<a href="/">The Portfolio of Cassia Leidigh</a>
 		</h1>
+		<ul id="menu">
+			{% nav index %}
+			{% nav gallery %}
+			{% nav about %}
+		</ul>
 	</div>
-	<ul id="menu">
-		{% nav index %}
-		{% nav gallery %}
-		{% nav about %}
-	</ul>
 	<div id="content">
-<!--
-		<div class="item-add">
-			<form enctype="multipart/form-data" action="{{ API_URL }}item/add/" method="POST">
-				<h4>Add a new item to this project</h4>
-				<select name="item_project" style="width:120px">
-					{% for project in projects_by_id %}
-					<option value="{{ project.id }}">{{ project.title }} ({{ project.id }})</option>
-					{% endfor %}
-				</select>
-				<input name="image_original" type="file" />
-				<p><button type="submit">Upload</button> <a class="cancel" href="#">Cancel</a></p>
-			</form>
-		</div>
--->
+
 {% block body %}
 {% endblock %}
 
 	</div><!-- #content -->
+	<div id="footer">
+		{% block footer %}
+		<p class="copyright">Everything here Copyright &copy; Cassia Leidigh {% now "Y" %}. Don&rsquo;t steal.</p>
+		{% endblock %}
+	</div>
 </div><!-- #wrapper -->
 
 </body>

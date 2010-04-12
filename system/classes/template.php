@@ -22,8 +22,12 @@ class Template {
 		self::set( 'MEDIA_URL', MEDIA_URL );
 		self::set( 'SYS_MEDIA_URL', SYS_MEDIA_URL );
 		self::set( 'API_URL', API_URL );
+		self::set( 'SITE_URL', SITE_URL );
 
 		if( file_exists( TEMPLATE_PATH . $name . "." . self::$format ) ){
+			self::$template_name = $name;
+			self::set( "body_id", $name);
+		} elseif( file_exists( SYS_TEMPLATE_PATH . $name . "." . self::$format ) ){
 			self::$template_name = $name;
 			self::set( "body_id", $name);
 		} else {
@@ -36,17 +40,6 @@ class Template {
 			self::set( "error_details", "The page you are looking for could not be found." );
 			self::render();
 		}
-	}
-
-	public function twig_init( $path ){
-		Twig_Autoloader::register();
-		$loader = new Twig_Loader_Filesystem($path);
-		$twig = new Twig_Environment( $loader , array(
-			'cache' => false,//STORAGE_PATH . "cache/",
-			'debug' => true,
-			'auto_reload' => true,
-			'base_template_class' => 'Template_Extras'
-		));
 	}
 
 	public static function set($k, $v){
@@ -79,20 +72,6 @@ class Template {
 		echo $template->render( self::$data );
 
 		exit();
-	}
-}
-
-class UserTemplate extends Template {
-	function __construct( $name = false ){
-		self::twig_init(TEMPLATE_PATH);
-		parent::__construct($name);
-	}
-}
-
-class SystemTemplate extends Template {
-	function __construct( $name = false ){
-		self::twig_init(SYS_TEMPLATE_PATH);
-		parent::__construct($name);
 	}
 }
 

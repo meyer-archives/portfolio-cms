@@ -1,24 +1,43 @@
 {% extends 'base.html' %}
 {% block page_title %}{{ current_project.title }}{% endblock %}
 {% block head %}
-	<script type="text/javascript" src="{{ MEDIA_URL }}swfobject.js"></script>
+<script src="{{ MEDIA_URL }}jquery.colorbox-min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="{{ MEDIA_URL }}colorbox.css" type="text/css" charset="utf-8">
+<script src="{{ SYS_MEDIA_URL }}js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function(){
+		$("a[rel=project-{{ current_project.id }}]").colorbox({
+			transition:"fade"
+//			height: "75%",
+//			width: "75%"
+		});
+		if( window.location.hash ){
+			$img = $("li"+window.location.hash+" img");
+//			$img.css({"border-color":"#AAA"});
+
+			setTimeout(function() {
+				$img.click();
+//				$img.css({"border-color":"#000"});
+			}, 500);
+		}
+	});
+	
+</script>
 {% endblock %}
 {% block body %}
-<h1>{{ current_project.title }}</h1>
-<div id="av-gallery">SimpleViewer requires JavaScript and the Flash Player. <a href="http://www.macromedia.com/go/getflashplayer/">Get Flash.</a></div>	
-<script type="text/javascript">
+<h1><a href="{{ SITE_URL }}gallery">Gallery</a> &rsaquo; {{ current_project.title }}</h1>
 
-var flashvars = {};
-flashvars.xmlURL = "{{ current_project.url }}.xml";
-var params = {
-	"wmode": "transparent"
-};
-//params.allowfullscreen = true;
-params.allowscriptaccess = "always";
-//params.bgcolor = "222222";
+<div id="gallery-single">
+<ul id="item-list">
+{% for item in items_by_project[current_project.id] %}
+	<li class="item" id="i{{ item.id }}">
+		<a href="{{ item.image }}" rel="project-{{ current_project.id }}"><img src="{{ item.thumb }}" title="{{ item.title }}"></a>
+	</li>
+{% else %}
+	<li>No items</li>
+{% endfor %}
+</ul>
 
-swfobject.embedSWF("{{ MEDIA_URL }}autoviewer.swf", "av-gallery", "100%", "500", "9.0.124", false, flashvars, params);
-
-</script>
+</div>
 
 {% endblock %}

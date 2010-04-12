@@ -17,8 +17,6 @@
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.localscroll.min.js"></script>
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.uniform.js"></script>
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.timers.js"></script>
-	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.quicksand.js"></script>
-	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.dataset.js"></script>
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}js/jquery.blockUI.js"></script>
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}uploadify/swfobject.js"></script>
 	<script type="text/javascript" src="{{ SYS_MEDIA_URL }}uploadify/jquery.uploadify.v2.1.0.min.js"></script>
@@ -34,51 +32,55 @@
 </div><!-- #wrapper -->
 
 <div id="admin-bar">
-	<div id="ab-shadow"></div>
-	<div id="ab-container">
-		<div id="ab-project-list" class="ab-list">
-			<div class="ab-list-header">
+	<!--<div id="focus">
+		<div>
+		</div>
+	</div>-->
+	<div id="shadow"></div>
+	<div id="container">
+		<div id="project-list" class="list">
+			<div class="list-header">
 				<h1>Projects</h1>
-				<a href="#" title="Add new project" id="ab-add-project" class="ab-add-button"><span>Add project</span></a>
+				<a href="#" title="Add new project" id="add-project" class="add-button"><span>Add project</span></a>
 			</div>
-			<div class="ab-list-container">
-				<ul class="ab-listview">
+			<div class="list-container">
+				<ul class="listview">
 {% for project in projects_by_id %}
-					<li class='project ab-list-item' data-pid='{{ project.id }}'>
+					<li class="project list-item" data-pid="{{ project.id }}">
 						<h2>{{ project.title }}</h2>
 						<ul class='options'>
-							<li class='ab-li-item view-project'><a href='#'>View project {{ project.id }}</a></li>
-							<li class='ab-li-item edit-project'><a href='#'>Edit project {{ project.id }}</a></li>
-							<li class='ab-li-item delete-project'><a href='{{ project.url }}'>Delete project {{ project.id }}</a></li>
-							<li class='ab-li-item sort-handle'><span>Reorder</span></li>
+							<li class="li-item view-project"><a href='#'>View project {{ project.id }}</a></li>
+							<li class="li-item edit-project"><a href='#'>Edit project {{ project.id }}</a></li>
+							<li class="li-item delete-project"><a href='{{ project.url }}'>Delete project {{ project.id }}</a></li>
+							<li class="li-item sort-handle"><span>Reorder</span></li>
 						</ul>
 					</li>
 {% endfor %}
 				</ul>
-				<div class="ab-listview-end-cap">
+				<div class="listview-end-cap">
 				</div>
 			</div>
-			<div class="ab-list-footer">
+			<div class="list-footer">
 			</div>
 		</div>
-		<div id="ab-item-list" class="ab-list">
-			<div class="ab-list-header">
+		<div id="item-list" class="list">
+			<div class="list-header">
 				<h1>Project Title</h1>
-				<a href="#" title="Add new project" id="ab-show-project-list" class="ab-add-button"><span>Add item</span></a>
+				<a href="#" title="Add new project" id="show-project-list" class="add-button"><span>Add item</span></a>
 			</div>
-			<div class="ab-list-container">
-				<ul class="ab-listview">
-					<li class="ab-list-item">Item 1</li>
-					<li class="ab-list-item">Item 2</li>
-					<li class="ab-list-item">Item 3</li>
-					<li class="ab-list-item">Item 4</li>
-					<li class="ab-list-item">Item 5</li>
-					<li class="ab-list-item">Item 6</li>
-					<li class="ab-list-item">Item 7</li>
+			<div class="list-container">
+				<ul class="listview">
+					<li class="list-item">Item 1</li>
+					<li class="list-item">Item 2</li>
+					<li class="list-item">Item 3</li>
+					<li class="list-item">Item 4</li>
+					<li class="list-item">Item 5</li>
+					<li class="list-item">Item 6</li>
+					<li class="list-item">Item 7</li>
 				</ul>
-				<div class="ab-listview-end-cap"></div>
+				<div class="listview-end-cap"></div>
 			</div>
-			<div class="ab-list-footer">
+			<div class="list-footer">
 			</div>
 		</div>
 	</div>

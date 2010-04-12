@@ -32,17 +32,11 @@ define( "MEDIA_URL", "/user/media/" );
 
 define( "TEMPLATE_PATH", SITE_PATH . "user/templates/" );
 
-// Twitter OAUTH config
-define( "CONSUMER_KEY", "pnLfCydtoZDC0Hzl03KQUw" );
-define( "CONSUMER_SECRET", "T6sZo6u5IlV6jzk3MzGbFkJamoTOVtLkW6SAm0hijnI" );
-define( "OAUTH_CALLBACK", SITE_URL . "twitter/callback" );
-
 // Load third-party classes and functions
 include_once( INCLUDES_PATH . "typogrify/smartypants.php" );
 include_once( INCLUDES_PATH . "typogrify/typogrify.php" );
 include_once( INCLUDES_PATH . "typogrify/markdown.php" );
 include_once( INCLUDES_PATH . "wideimage/WideImage.php" );
-include_once( INCLUDES_PATH . "twitteroauth/twitteroauth.php" );
 
 // Load the functions
 include_once( SYS_PATH . "functions.php" );
@@ -57,7 +51,7 @@ include_once( INCLUDES_PATH . "template.php" );
 include_once( INCLUDES_PATH . "cache.php" );
 
 Twig_Autoloader::register();
-$loader = new Twig_Loader_Filesystem(TEMPLATE_PATH);
+$loader = new Twig_Loader_Filesystem(array(TEMPLATE_PATH,SYS_TEMPLATE_PATH));
 $twig = new Twig_Environment( $loader , array(
 	'cache' => false,//STORAGE_PATH . "cache/",
 	'debug' => true,

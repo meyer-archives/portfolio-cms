@@ -9,7 +9,7 @@
 <div class="gallery-preview">
 	<ul id="thumbs">
 		{% for item in items_by_id|reverse|slice(0,7) %}
-			<li><a href="{{ projects_by_id[item.project].url }}"><img src="{{ item.thumb }}"></a></li>
+			<li><a href="{{ projects_by_id[item.project].url }}#i{{ item.id }}"><img src="{{ item.thumb }}"></a></li>
 		{% else %}
 			<li>No images</li>
 		{% endfor %}
@@ -17,4 +17,8 @@
 	<p class="preview-link"><a href="/gallery/">View the gallery</a>&nbsp;&rsaquo;</p>
 </div>
 
+{% endblock %}
+
+{% block footer %}
+{% parent %}
 {% endblock %}

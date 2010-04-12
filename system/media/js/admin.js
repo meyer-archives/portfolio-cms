@@ -3,15 +3,15 @@ if(!window.console)console={log:function(){return;},error:function(){return;}};
 
 $(document).ready(function() {
 	window.$$ = {
-		itemList: $("#ab-item-list"),
-		projectList: $("#ab-project-list"),
-		ab: $("#ab-container"),
+		itemList: $("#item-list"),
+		projectList: $("#project-list"),
+		ab: $("#container"),
 		isAjaxing: false,
 		showingItems: false,
 		d: $(document),
 		w: $(window),
 		b: $("body"),
-		l: $("ul.ab-listview")
+		l: $("ul.listview")
 	}
 
 	$(document).ajaxStart(function(){
@@ -25,14 +25,14 @@ $(document).ready(function() {
 	    return text.toLowerCase().replace(/([^\w]|^the\s)+/g,'-').replace(/(^-|-$)/g,"");
 	}
 
-	$("#ab-project-list ul.ab-listview").sortable({
+	$("#project-list ul.listview").sortable({
 		axis: "y",
 		handle: ".sort-handle span",
-		placeholder: "ab-li-item item-placeholder",
+		placeholder: "li-item item-placeholder",
 		helper: 'clone'
 	}).disableSelection();
 
-	$("#ab-reorder-items,#ab-reorder-projects").click(function(){
+	$("#reorder-items,#reorder-projects").click(function(){
 		var $a = $(this);
 		if( $a.hasClass("save-items") ){
 			$a.removeClass("save-items").find("span").text("reorder");
@@ -68,13 +68,13 @@ $(document).ready(function() {
 		$$.resizeTimer = setTimeout(resizeListview, 100);
 	});
 
-	$("#ab-show-project-list").click(function(){
+	$("#show-project-list").click(function(){
 		$$.ab.animate({left:0},150);
 		$$.showingItems = false;
 	});
 
-	$("#ab-project-list ul.ab-listview li.project").bind("viewProject",function(){
-		var pid = $(this).dataset("pid");
+	$("#project-list ul.listview li.project").bind("viewProject",function(){
+		var pid = $(this).attr("data-pid");
 		var $link = $(this);
 
 		if( pid > 0 ) {
@@ -88,17 +88,23 @@ $(document).ready(function() {
 				function(e, textStatus){
 					$link.removeClass("ajaxing");
 
-					$("#ab-item-list h1").html(e.data.project.title);
+					$("#item-list h1").html(e.data.project.title);
+
+					$.each( e.data.items, function(itemID){
+						console.log(e.data.items);
+						console.log("---");
+					} )
+
 					if( e.data.items.length > 0 ){
 					} else {
-						$("#ab-item-list ul").html("<li class='ab-list-item empty'>"+e.data.project.title+" ("+pid+") is empty</li>");
+						$("#item-list ul").html("<li class='list-item empty'>"+e.data.project.title+" ("+pid+") is empty</li>");
 					}
 
 					$$.ab.animate({left:-250},150);
 					$$.showingItems = true;
 
 					console.log(e.status+" - "+e.status_msg);
-					console.log(e);
+//					console.log(e);
 				}
 			);
 
@@ -109,11 +115,11 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$("#ab-project-list .view-project a").click(function(){
+	$("#project-list .view-project a").click(function(){
 		$(this).trigger("viewProject");
 	});
 
-	$("#wrapper").block({
-		"message": "<a href='#'>Reload Frame</a>"
-	});
+//	$("#wrapper").block({
+//		"message": "<a href='#'>Reload Frame</a>"
+//	});
 });
