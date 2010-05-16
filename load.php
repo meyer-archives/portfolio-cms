@@ -46,7 +46,7 @@ include_once( INCLUDES_PATH . "base.php" );
 include_once( INCLUDES_PATH . "router.php" );
 include_once( INCLUDES_PATH . "db.php" );
 include_once( INCLUDES_PATH . "portfolio.php" );
-include_once( INCLUDES_PATH . "twig/Autoloader.php" );
+include_once( INCLUDES_PATH . "twig/lib/Twig/Autoloader.php" );
 include_once( INCLUDES_PATH . "template.php" );
 include_once( INCLUDES_PATH . "cache.php" );
 

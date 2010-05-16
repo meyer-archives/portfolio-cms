@@ -163,7 +163,7 @@ class Thumbnail_TokenParser extends Twig_TokenParser{
 }
 
 class Thumbnail_Node extends Twig_Node{
-	protected $date_string;
+	protected $path, $size, $crop_mode;
  
 	public function __construct($lineno, $path, $size, $crop_mode){
 		parent::__construct($lineno);
@@ -175,7 +175,7 @@ class Thumbnail_Node extends Twig_Node{
 			->addDebugInfo($this)
 //			->write('echo "<li class=\"nav-link\"><a href=\"".SITE_URL."\">'.$this->slug.'</a></li>"')
 
-			->write('echo ')
+			->write('echo "<!-- Thumbnail -->";')
 
 			->raw(";\n")
 		;

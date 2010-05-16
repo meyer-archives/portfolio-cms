@@ -7,14 +7,13 @@
 	<li>
 		<a href="{{ project.url }}">
 			{% if first_item %}
-			<img src="{{ first_item.thumb }}" alt="{{ project.title }}">
+			<img src="{% thumbnail first_item.image 50 %}" alt="{{ project.title }}">
 			{% else %}
-			<img src="{{ MEDIA_URL }}default-image.png" alt="{{ project.title }}">
+			<img src="{% thumbnail 'default-image.png' 50 %}" alt="{{ project.title }}">
 			{% endif %}
 			<strong>{{ project.title }} ({{ project.item_count }})</strong>
 		</a>
 	</li>
-	{% thumbnail first_item.image 50 50 inside %}
 {% else %}
 <!-- Project {{ project.id }} ({{ project.title_src }}) is empty -->
 {% endif %}
