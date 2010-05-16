@@ -2,7 +2,22 @@
 {% block body %}
 <ul>
 {% for project in projects_by_id %}
-	<li><a href="{{ project.url }}">{{ project.title }} ({{ project.item_count }})</a></li>
+{% if items_by_project[project.id] %}
+{% set first_item as items_by_project[project.id]|first %}
+	<li>
+		<a href="{{ project.url }}">
+			{% if first_item %}
+			<img src="{{ first_item.thumb }}" alt="{{ project.title }}">
+			{% else %}
+			<img src="{{ MEDIA_URL }}default-image.png" alt="{{ project.title }}">
+			{% endif %}
+			<strong>{{ project.title }} ({{ project.item_count }})</strong>
+		</a>
+	</li>
+	{% thumbnail first_item.image 50 50 inside %}
+{% else %}
+<!-- Project {{ project.id }} ({{ project.title_src }}) is empty -->
+{% endif %}
 {% endfor %}
 </ul>
 {% endblock %}
