@@ -5,11 +5,11 @@ class Cache {
 	public $age = 0;
 	private static $instance;
 	private static $data;
- 
+
 	private function __construct(){
 		return;
 	}
- 
+
 	public static function &get_instance() {
 		if( self::$instance === null ){
 			self::$instance = new Cache();
@@ -35,7 +35,7 @@ class Cache {
 		if( !file_exists( $cache_file ) )
 			touch( $cache_file ) or die( "Error creating cache file!" );
 		if( !is_writable( $cache_file ) )
-			die( "Cache file is not writable!" );		
+			die( "Cache file is not writable!" );
 
 		// Clear the cache file
 		$fp = fopen($cache_file, 'w');

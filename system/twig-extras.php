@@ -71,7 +71,7 @@ class Nav_Node extends Twig_Node{
 	protected $title;
 	protected $regex;
 	protected $url;
- 
+
 	public function __construct($link_slug, $lineno){
 		parent::__construct($lineno);
 
@@ -96,7 +96,7 @@ class Nav_Node extends Twig_Node{
 			$this->regex = "^\s$";
 		}
 	}
- 
+
 	public function compile($compiler){
 		$compiler
 			->addDebugInfo($this)
@@ -128,30 +128,28 @@ class Now_TokenParser extends Twig_TokenParser{
 
 class Now_Node extends Twig_Node{
 	protected $date_string;
- 
+
 	public function __construct($date_string, $lineno){
 		parent::__construct($lineno);
 		$this->date_string = $date_string;
 	}
- 
+
 	public function compile($compiler){
 		$compiler
 			->addDebugInfo($this)
-//			->write('echo "<li class=\"nav-link\"><a href=\"".SITE_URL."\">'.$this->slug.'</a></li>"')
-
-			->write('echo date("' . $this->date_string . '");')
-
+			->write("echo date('{$this->date_string}')")
 			->raw(";\n")
 		;
 	}
 }
 
-
+// {% thumbnail IMAGE_URL SIZE (RESIZE_MODE) %}
 class Thumbnail_TokenParser extends Twig_TokenParser{
 	public function parse(Twig_Token $token){
 		$lineno = $token->getLine();
-		$path = $this->parser->getStream()->expect(Twig_Token::STRING_TYPE)->getValue();
+		$path = $this->parser->getExpressionParser()->parseExpression();
 		$size = $this->parser->getStream()->expect(Twig_Token::NUMBER_TYPE)->getValue();
+		$crop_mode = $this->parser->getStream()->expect(Twig_Token::NAME_TYPE)->getValue();
 		$this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
 
 		return new Thumbnail_Node($lineno, $path, $size, $crop_mode);
@@ -164,20 +162,25 @@ class Thumbnail_TokenParser extends Twig_TokenParser{
 
 class Thumbnail_Node extends Twig_Node{
 	protected $path, $size, $crop_mode;
- 
-	public function __construct($lineno, $path, $size, $crop_mode){
+
+	public function __construct($lineno, $path, $size = false, $crop_mode = false){
+		$this->path = $path;
+		$this->size = $size;
+		$this->crop_mode = $crop_mode;
+
 		parent::__construct($lineno);
-		$this->date_string = $date_string;
 	}
- 
+
 	public function compile($compiler){
+		$path = $compiler->subcompile($this->path)->getSource();
+
+		print_r( $path );
+
 		$compiler
 			->addDebugInfo($this)
-//			->write('echo "<li class=\"nav-link\"><a href=\"".SITE_URL."\">'.$this->slug.'</a></li>"')
-
-			->write('echo "<!-- Thumbnail -->";')
-
-			->raw(";\n")
+//			->subcompile($this->path)
+//			->write("echo '$path';")
+//			->raw(";\n")
 		;
 	}
 }

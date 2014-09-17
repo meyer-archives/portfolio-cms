@@ -6,8 +6,8 @@ class DB{
 		if( self::$pdo === null ){
 			try {
 				self::$pdo = new PDO('sqlite:'.SITE_PATH.'storage/'.DB_FILENAME);
-			} catch( PDOException $e ){ 
-				die( "PDO Error: " . $e->getMessage() ); 
+			} catch( PDOException $e ){
+				die( "PDO Error: " . $e->getMessage() );
 			}
 		}
 		return self::$pdo;

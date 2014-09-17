@@ -8,7 +8,7 @@ if( get_magic_quotes_gpc() )
 	die( "magic_quotes is enabled, but should not be. <a href='http://bit.ly/86XywY'>Fix that problem</a>." );
 
 define( "SITE_PATH", dirname(__FILE__) . "/" );
-//define( "SITE_URL", "/" ); // This is set in config.php
+define( "SITE_URL", "/" );
 define( "API_URL", SITE_URL . "api/" );
 
 define( "STORAGE_PATH", SITE_PATH . "storage/" );
